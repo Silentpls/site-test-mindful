@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mindful bij Elise | Rust en balans vanuit verbinding</title>
+<meta name="description" content="Mindful bij Elise begeleidt je bij het vinden van rust en balans vanuit verbinding, met mindfulness training en coaching in Hengelo." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Outfit:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          teal: {
+            DEFAULT: '#5699b2',
+            50: '#eef6f8',
+            100: '#d9edf1',
+            300: '#8fc0d1',
+            500: '#5699b2',
+            600: '#3f7f98',
+            700: '#2e6478',
+          },
+          ink: {
+            DEFAULT: '#000000',
+            700: '#404040',
+            600: '#525252',
+            400: '#707070',
+          },
+          mist: '#f1eee1',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'sans-serif'],
+          body: ['Outfit', 'sans-serif'],
+        },
+        maxWidth: {
+          'content': '1400px',
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  :root { color-scheme: light; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: #ffffff;
+    color: #000000;
+  }
+  h1, h2, h3, .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+
+  ::selection { background: #5699b2; color: #ffffff; }
+
+  /* --- Wave (hero + section divider) ---
+     Each layer is ONE svg element containing the wave path twice, at 200% width.
+     Animating that single element's own transform (CSS) tiles seamlessly with no
+     inter-element seam, and no other script ever touches this element's transform. */
+  .wave-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .wave-bob { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; }
+  .wave-bob svg { display: block; width: 200%; height: 100%; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .wave-anim-a { animation: wave-shift 28s linear infinite; }
+    .wave-anim-b { animation: wave-shift 42s linear infinite; }
+    /* Bob lives on the wrapper div, never the svg that wave-shift animates,
+       and runs as a plain CSS animation (compositor thread) so it can't
+       desync or stall the way a rAF-driven JS tween can after a backgrounded tab. */
+    #waveBobA { animation: wave-bob 4.2s ease-in-out infinite alternate; }
+    #waveBobB { animation: wave-bob 5s ease-in-out infinite alternate; animation-delay: .8s; }
+  }
+  @keyframes wave-shift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes wave-bob {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-10px); }
+  }
+
+  /* --- Backlight glow (magicui pattern) --- */
+  .backlight { position: relative; isolation: isolate; }
+  .backlight::before {
+    content: ""; position: absolute; inset: -6%; z-index: -1;
+    background: radial-gradient(closest-side, rgba(86,153,178,0.5), rgba(86,153,178,0.15) 62%, transparent 78%);
+    filter: blur(38px) saturate(1.3);
+  }
+
+  /* --- Single-accent animated highlight word (teal only, used once) --- */
+  .brand-gradient {
+    background-image: linear-gradient(100deg, #2e6478, #8fc0d1, #2e6478);
+    background-size: 220% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .brand-gradient { animation: brand-flow 8s ease-in-out infinite; }
+  }
+  @keyframes brand-flow { to { background-position: 220% center; } }
+
+  /* --- Dia-style sweep reveal (teal-only, monochrome) --- */
+  .sweep-reveal { background-image: linear-gradient(90deg, #8fc0d1, #2e6478, #000000); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; background-position: 100% 0; transition: background-position 1.4s cubic-bezier(.4,0,.2,1); }
+  .sweep-reveal.is-in-view { background-position: 0 0; }
+
+  /* --- Scroll reveal (IntersectionObserver driven, transform/opacity only) --- */
+  [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  [data-reveal].is-in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  .btn-primary { background: #2e6478; color: #ffffff; }
+  .btn-primary:hover { background: #244f5f; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .card-shadow { box-shadow: 0 20px 45px -25px rgba(0,0,0,0.18); }
+
+  /* --- "Herken jij dit?" wave CTA: pulsing ring to draw the eye + a bobbing wave icon --- */
+  .wave-cta {
+    position: relative;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.5);
+    color: #ffffff;
+    backdrop-filter: blur(6px);
+  }
+  .wave-cta:hover { background: rgba(255,255,255,0.24); }
+  .wave-cta::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    border: 1.5px solid rgba(255,255,255,0.55); pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .wave-cta::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      border: 1.5px solid rgba(255,255,255,0.7);
+      animation: wave-cta-ping 2.4s cubic-bezier(0,0,.2,1) infinite;
+      pointer-events: none;
+    }
+    .wave-cta-icon svg { animation: wave-cta-bob 1.8s ease-in-out infinite; }
+  }
+  @keyframes wave-cta-ping { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.35); opacity: 0; } }
+  @keyframes wave-cta-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+  /* --- Wave flood takeover: click the wave, it rises full-screen, a quote appears --- */
+  .wave-flood-layer { position: absolute; inset: -1px -1px -10% -1px; transform: translateY(100%); will-change: transform; transition: transform .62s cubic-bezier(.65,0,.35,1); }
+  .wave-flood-layer.is-covering { transform: translateY(0%); }
+  .wave-flood-layer svg { display: block; width: 100%; height: 100%; }
+
+  #waveQuote { transition: opacity .6s ease; }
+  #waveQuote.is-visible { opacity: 1; pointer-events: auto; }
+  .wave-quote-underline path { stroke-dasharray: 300; stroke-dashoffset: 300; transition: stroke-dashoffset 1s cubic-bezier(.16,1,.3,1) .25s; }
+  #waveQuote.is-visible .wave-quote-underline path { stroke-dashoffset: 0; }
+  .wave-quote-text {
+    font-family: 'Caveat', cursive; opacity: 0; filter: blur(6px); transform: translateY(16px) scale(.97);
+    transition: opacity .9s ease .35s, filter .9s ease .35s, transform .9s cubic-bezier(.16,1,.3,1) .35s;
+  }
+  #waveQuote.is-visible .wave-quote-text { opacity: 1; filter: blur(0); transform: none; }
+  .wave-quote-actions { opacity: 0; transform: translateY(10px); transition: opacity .7s ease .7s, transform .7s ease .7s; }
+  #waveQuote.is-visible .wave-quote-actions { opacity: 1; transform: none; }
+
+  /* --- Bento training cards: soft glow + lift on hover, matches magicui bento pattern --- */
+  .bento-card { position: relative; overflow: hidden; transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease; }
+  .bento-card::before {
+    content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .4s ease;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.35), transparent 60%);
+  }
+  .bento-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -20px rgba(46,100,120,0.35); }
+  .bento-card:hover::before { opacity: 1; }
+
+  /* --- "Bekijk de trainingen" CTA: gradient tile, breathing icon, sweeping shine on hover --- */
+  .aanbod-cta {
+    position: relative; overflow: hidden;
+    background: linear-gradient(120deg, #2e6478, #3f7f98 55%, #5699b2);
+    box-shadow: 0 22px 48px -22px rgba(46,100,120,0.6);
+    transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease;
+  }
+  .aanbod-cta:hover { transform: translateY(-4px); box-shadow: 0 28px 60px -20px rgba(46,100,120,0.7); }
+  .aanbod-cta::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 25%, rgba(255,255,255,0.28) 40%, transparent 55%);
+    transform: translateX(-130%); transition: transform .9s ease;
+  }
+  .aanbod-cta:hover::before { transform: translateX(130%); }
+  .aanbod-cta .cta-icon { background: rgba(255,255,255,0.18); transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+  .aanbod-cta:hover .cta-icon { transform: rotate(-8deg) scale(1.08); }
+  @media (prefers-reduced-motion: no-preference) {
+    .aanbod-cta .cta-icon svg { animation: cta-icon-breathe 3.2s ease-in-out infinite; }
+  }
+  @keyframes cta-icon-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+  .aanbod-cta .cta-chevron { transition: transform .45s cubic-bezier(.16,1,.3,1); }
+  .aanbod-cta:hover .cta-chevron { transform: translateX(4px); }
+
+  /* --- Magnifying "lens" hover on the kennismaking room photo --- */
+  .lens-wrap { position: relative; overflow: hidden; cursor: zoom-in; touch-action: none; }
+  .lens-glass {
+    position: absolute; width: 130px; height: 130px; border-radius: 50%;
+    border: 3px solid #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    pointer-events: none; opacity: 0; transition: opacity .15s ease;
+    background-repeat: no-repeat;
+  }
+  .lens-wrap:hover .lens-glass { opacity: 1; }
+
+  /* --- Elise section watercolor backdrop (kept subtle so copy stays fully readable) --- */
+  #elise { position: relative; }
+  #elise .elise-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: url('assets/img/elise-watercolor-bg.png') center / cover;
+    opacity: 0.55;
+  }
+  #elise .elise-bg::after { content: ""; position: absolute; inset: 0; background: rgba(241,238,225,0.35); }
+  #elise > .max-w-content { position: relative; z-index: 1; }
+
+  /* --- Young tree grows into the full tree when trainings open ---
+     mix-blend-mode:multiply drops each drawing's white background into the
+     panel colour beneath it, so no image edge/frame is ever visible. */
+  .tree-stage { position: relative; }
+  .tree-stage img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+    mix-blend-mode: multiply;
+    transition: opacity 1.15s cubic-bezier(.22,1,.36,1), transform 1.15s cubic-bezier(.22,1,.36,1), filter 1.15s ease;
+  }
+  .tree-stage img.tree-young { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  .tree-stage img.tree-full { opacity: 0; transform: scale(.72) translateY(8%); filter: blur(3px); }
+  .tree-stage.is-grown img.tree-young { opacity: 0; transform: scale(1.12) translateY(-6%); filter: blur(4px); }
+  .tree-stage.is-grown img.tree-full { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  .tree-stage::after {
+    content: ""; position: absolute; inset: -18%; z-index: -1; border-radius: 50%; opacity: 0; pointer-events: none;
+    background: radial-gradient(closest-side, rgba(134,196,150,0.5), transparent 72%);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .tree-stage.is-grown::after { animation: tree-grow-pulse 1.5s ease-out; }
+  }
+  @keyframes tree-grow-pulse { 0% { opacity: 0; transform: scale(.55); } 35% { opacity: 1; } 100% { opacity: 0; transform: scale(1.35); } }
+</style>
+</head>
+
+<body class="bg-white text-black antialiased overflow-x-hidden">
+
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:bg-black focus:text-white focus:px-4 focus:py-2 focus:rounded">Naar inhoud</a>
+
+<!-- NAV -->
+<header class="fixed top-0 inset-x-0 z-40 bg-white/90 backdrop-blur border-b border-black/10">
+  <nav class="max-w-content mx-auto h-16 md:h-[72px] px-5 md:px-8 flex items-center justify-between">
+    <a href="#" class="shrink-0 flex items-center">
+      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 md:h-10 w-auto" />
+    </a>
+
+    <ul class="hidden lg:flex items-center gap-8 font-body text-[15px] text-ink-700">
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#aanbod">Aanbod</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#herkenning">Mindfulness</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#elise">Elise</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="flex items-center gap-2">
+      <div class="hidden md:flex items-center gap-1 pr-2 mr-1 border-r border-black/10">
+        <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+      </div>
+      <a href="#contact" class="hidden sm:inline-flex btn-primary rounded-full px-5 py-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+        Maak een afspraak
+      </a>
+      <button id="menuBtn" aria-label="Open menu" aria-expanded="false" class="lg:hidden grid place-items-center w-11 h-11 rounded-full hover:bg-black/5 transition-colors">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path id="menuIcon" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobileMenu" class="lg:hidden hidden border-t border-black/10 bg-white px-5 pb-6 pt-2">
+    <ul class="flex flex-col gap-1 font-body text-base">
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="#aanbod">Aanbod</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="#herkenning">Mindfulness</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="#elise">Elise</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="#contact">Contact</a></li>
+      <li class="pt-2"><a href="tel:0654790117" class="block py-3 min-h-[44px] flex items-center text-teal-700">06 54 79 01 17</a></li>
+    </ul>
+    <div class="flex items-center gap-3 pt-3 mt-2 border-t border-black/10">
+      <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+      <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+      <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="relative min-h-[100dvh] flex items-end pt-24 pb-28 md:pb-36 overflow-hidden">
+  <div class="absolute inset-0 -z-20">
+    <img src="assets/img/hero.jpg" alt="Duinpad naar het strand bij zonsopkomst, sfeerbeeld van Mindful bij Elise" class="w-full h-full object-cover" loading="eager" />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/20"></div>
+  </div>
+
+  <!-- animated wave divider at hero base -->
+  <div class="wave-wrap h-40 md:h-56 !top-auto" aria-hidden="true">
+    <!-- solid base strip: bob motion above can only ever reveal this mist colour, never the hero photo, so the wave and the next section stay visually fused with no seam -->
+    <div class="absolute bottom-0 inset-x-0 h-4 bg-mist"></div>
+    <div class="wave-bob" id="waveBobA">
+      <svg class="wave-anim-a" viewBox="0 0 2400 200" preserveAspectRatio="none">
+        <path d="M0,120 C150,180 350,40 600,110 C850,180 1050,60 1200,120 C1350,180 1550,40 1800,110 C2050,180 2250,60 2400,120 L2400,200 L0,200 Z" fill="#f1eee1"/>
+      </svg>
+    </div>
+    <div class="wave-bob opacity-60" id="waveBobB" style="bottom:-6px">
+      <svg class="wave-anim-b" viewBox="0 0 2400 200" preserveAspectRatio="none">
+        <path d="M0,140 C200,90 400,170 650,120 C900,70 1050,150 1200,110 C1450,70 1650,150 1800,110 C2050,70 2250,150 2400,110 L2400,200 L0,200 Z" fill="#f1eee1"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="relative z-10 max-w-content mx-auto px-5 md:px-8 w-full">
+    <div class="max-w-3xl">
+      <h1 class="font-display font-semibold text-white text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05]">
+        Toe aan rust<br>en balans?
+      </h1>
+      <p id="morphLine" class="mt-5 text-white text-xl md:text-2xl lg:text-3xl font-display font-medium min-h-[1.4em]" aria-live="polite">Hoe is het nu echt met jou?</p>
+      <p class="mt-6 text-white/90 text-base md:text-lg leading-relaxed max-w-lg">
+        Mindful bij Elise begeleidt je terug naar rust, vanuit <span class="brand-gradient font-medium">verbinding</span> met jezelf, je lijf en je omgeving.
+      </p>
+      <div class="mt-9 flex flex-wrap items-center gap-4">
+        <a href="#contact" class="btn-primary inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+          Maak een vrijblijvende afspraak
+        </a>
+        <button id="waveCta" type="button" class="wave-cta inline-flex items-center gap-2.5 rounded-full pl-4 pr-6 py-3.5 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+          <span class="wave-cta-icon w-8 h-8 grid place-items-center rounded-full bg-white/20 shrink-0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 16c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/><path d="M2 10c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/></svg>
+          </span>
+          Herken jij dit?
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-screen wave flood: click the wave button, it rises and covers the screen, revealing a quote -->
+  <div id="waveFlood" class="fixed inset-0 z-[60] pointer-events-none hidden" aria-hidden="true">
+    <div class="wave-flood-layer" id="floodA">
+      <svg viewBox="0 0 200 220" preserveAspectRatio="none"><path d="M0,40 C40,0 80,60 120,30 C150,8 180,35 200,20 L200,220 L0,220 Z" fill="#2e6478"/></svg>
+    </div>
+    <div class="wave-flood-layer" id="floodB">
+      <svg viewBox="0 0 200 220" preserveAspectRatio="none"><path d="M0,55 C50,15 90,70 130,45 C160,25 180,50 200,40 L200,220 L0,220 Z" fill="#f1eee1"/></svg>
+    </div>
+  </div>
+
+  <div id="waveQuote" class="fixed inset-0 z-[65] flex items-center justify-center px-6 opacity-0 pointer-events-none" role="dialog" aria-label="Citaat">
+    <div class="text-center max-w-xl">
+      <svg class="wave-quote-underline mx-auto mb-6" width="150" height="20" viewBox="0 0 150 20" fill="none" aria-hidden="true">
+        <path d="M2 14C22 1 36 19 54 8s26 11 46-1 26 10 46-2" stroke="#2e6478" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <p class="wave-quote-text text-teal-700 text-4xl sm:text-5xl md:text-6xl leading-[1.15]">
+        &ldquo;Je kunt de golven niet stoppen,<br>je kunt wel leren surfen.&rdquo;
+      </p>
+      <div class="wave-quote-actions mt-10 flex flex-col items-center gap-3">
+        <button id="waveQuoteClose" type="button" class="inline-flex items-center gap-2.5 rounded-full border border-teal-700/30 pl-3 pr-5 py-2.5 text-sm font-medium text-teal-700 hover:bg-teal-700/5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-700">
+          <span class="w-7 h-7 grid place-items-center rounded-full bg-teal-700/10">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2e6478" stroke-width="2" stroke-linecap="round"><path d="M2 16c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/><path d="M2 10c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/></svg>
+          </span>
+          Terug naar boven
+        </button>
+        <span class="text-xs text-teal-700/60 tracking-wide">of scroll verder om door te gaan ↓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HERKENNING -->
+<section id="herkenning" class="bg-mist py-20 md:py-28">
+  <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-12 gap-10">
+    <div class="md:col-span-5" data-reveal>
+      <h2 class="font-display font-semibold text-3xl md:text-4xl leading-tight text-black">
+        Ben je regelmatig onrustig<br class="hidden md:block"> of gejaagd?
+      </h2>
+    </div>
+    <div class="md:col-span-7 md:pt-2" data-reveal>
+      <p class="text-lg text-ink-700 leading-relaxed">
+        Gaan de dingen niet zoals je wilt dat ze gaan? Ben je snel geïrriteerd of boos?
+        Vind je het lastig om te ontspannen?
+      </p>
+      <p class="mt-5 text-ink-700 leading-[1.75]">
+        Dagen vliegen voorbij, je komt regelmatig tijd tekort door alles wat moet. Je voelt je
+        opgejaagd en zit niet lekker in je vel. Je bent een kei in piekeren, raakt snel
+        geïrriteerd en een goede werk-privébalans bewaren vind je lastig. Het voelt steeds meer
+        alsof je aan het overleven bent in plaats van het leven.
+      </p>
+      <p class="mt-6 font-display text-2xl md:text-3xl">
+        <span class="sweep-reveal" data-sweep>(Deels) herkenbaar?</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- AANBOD -->
+<section id="aanbod" class="bg-white py-20 md:py-28">
+  <div class="max-w-content mx-auto px-5 md:px-8">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+      <div data-reveal>
+        <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Praktijk voor bewustwording en groei</h2>
+        <p class="mt-4 text-ink-700 leading-relaxed max-w-md">
+          Training en coaching voor iedereen die uit balans is geraakt, stress of onrust ervaart,
+          of wil werken aan persoonlijke ontwikkeling, in een veilige leeromgeving.
+        </p>
+
+        <!-- Collapsed state: single tile -->
+        <button id="aanbodToggle" class="aanbod-cta mt-10 w-full flex items-center gap-6 text-left rounded-3xl p-7 md:p-8 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700">
+          <span class="cta-icon w-14 h-14 shrink-0 rounded-full grid place-items-center">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </span>
+          <span class="flex-1 relative z-10">
+            <span class="block font-display text-xl md:text-2xl font-medium">Bekijk de trainingen</span>
+            <span class="block mt-1 text-white/75 text-sm md:text-base">Vier vormen van mindfulness, van kennismaking tot verdieping.</span>
+          </span>
+          <svg id="aanbodChevron" class="cta-chevron shrink-0 relative z-10" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Young tree grows into the full tree once the trainings are opened; no card/box, sits loose on the page -->
+      <div class="tree-stage relative aspect-square max-w-sm w-full mx-auto" id="treeStage" data-reveal>
+        <img src="assets/img/tree-young.jpg" alt="Jonge boom in de grond, symbool voor het begin van groei" class="tree-young" loading="lazy" />
+        <img src="assets/img/tree-full.jpg" alt="Volgroeide boom met vol blad, symbool voor bewustwording en groei" class="tree-full" loading="lazy" />
+      </div>
+    </div>
+
+    <!-- Expanded state: 4 training cards, hidden until toggled -->
+    <div id="aanbodGrid" class="hidden mt-12">
+      <button id="aanbodCollapse" class="mb-6 text-sm text-teal-700 hover:text-teal-600 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-700 rounded">
+        Toon minder
+      </button>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+
+        <div class="aanbod-card bento-card rounded-3xl bg-teal-700 text-white p-8 md:p-10 flex flex-col justify-between min-h-[300px] card-shadow md:col-span-2 md:row-span-2">
+          <img src="assets/img/icon-groep.svg" alt="" class="w-12 h-12 brightness-0 invert opacity-90" loading="lazy" width="48" height="48" />
+          <div>
+            <h3 class="font-display text-2xl font-medium">Training Mindfulness Groep</h3>
+            <p class="mt-2 text-white/80 leading-relaxed">Acht weken samen leren vertragen, in een kleine groep met persoonlijke aandacht.</p>
+            <a href="#" class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium hover:gap-2.5 transition-all">
+              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="aanbod-card bento-card rounded-3xl bg-teal-50 p-7 flex flex-col justify-between min-h-[300px]">
+          <img src="assets/img/icon-kennismaken.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
+          <div>
+            <h3 class="font-display text-xl font-medium text-black">Kennismaken met mindfulness</h3>
+            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Een eerste, vrijblijvend gesprek.</p>
+            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="aanbod-card bento-card rounded-3xl bg-mist p-7 flex flex-col justify-between min-h-[300px]">
+          <img src="assets/img/icon-individueel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
+          <div>
+            <h3 class="font-display text-xl font-medium text-black">Training Individueel</h3>
+            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Op je eigen tempo, één op één begeleid.</p>
+            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="aanbod-card bento-card rounded-3xl bg-teal-50 p-7 flex items-center gap-6 min-h-[150px] md:col-span-2">
+          <img src="assets/img/icon-wandel.svg" alt="" class="w-11 h-11 shrink-0" loading="lazy" width="44" height="44" />
+          <div>
+            <h3 class="font-display text-xl font-medium text-black">Mindfulness Wandeltraining</h3>
+            <p class="mt-1 text-ink-600 text-sm leading-relaxed">Bewust bewegen in de buitenlucht.</p>
+            <a href="#" class="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVER ELISE -->
+<section id="elise" class="bg-mist py-20 md:py-28 overflow-hidden">
+  <div class="elise-bg" aria-hidden="true"></div>
+  <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-14 md:gap-20 items-center">
+    <div class="relative order-2 md:order-1" data-reveal>
+      <div class="backlight rounded-[2rem] overflow-hidden aspect-[4/5] max-w-md mx-auto">
+        <img src="assets/img/elise.jpg" alt="Portret van Elise Wagelaar, oprichter van Mindful bij Elise" class="w-full h-full object-cover" loading="lazy" />
+      </div>
+    </div>
+    <div class="order-1 md:order-2" data-reveal>
+      <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Hallo, ik ben Elise</h2>
+      <p class="mt-5 text-ink-700 leading-[1.75]">
+        Leuk dat je op mijn site kijkt. Ik ontmoet je graag binnenkort in een persoonlijk gesprek,
+        maar hier alvast meer over mij.
+      </p>
+      <p class="mt-4 text-ink-700 leading-[1.75]">
+        Ik geloof, en heb zelf ervaren, dat je gelukkiger kunt leven als je aandacht hebt voor de
+        conditie van je lijf én je geest. Door je bewust te worden van je gedachten, emoties en
+        wat er op een dieper niveau in je omgaat, leer je jezelf pas echt kennen. Daar nemen we
+        vaak te weinig tijd voor.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-6">
+        <a href="https://mindfulbijelise.nl/elise/" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 rounded-full px-6 py-3 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+          Meer over Elise
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS (click-through slider, one large readable quote at a time) -->
+<section id="ervaringen" class="bg-white py-20 md:py-28">
+  <div class="max-w-content mx-auto px-5 md:px-8">
+    <div data-reveal>
+      <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Wat trainingen bij Elise oplevert</h2>
+    </div>
+
+    <div class="mt-12 md:mt-16 max-w-3xl mx-auto text-center" data-reveal>
+      <svg width="40" height="32" viewBox="0 0 40 32" fill="#8fc0d1" class="mx-auto mb-6" aria-hidden="true"><path d="M0 20.8C0 9.6 7.2 2.4 16.8 0l2.4 4.8c-6.4 2.4-9.6 6.4-9.6 12h8v16H0V20.8zm20.8 0C20.8 9.6 28 2.4 37.6 0L40 4.8c-6.4 2.4-9.6 6.4-9.6 12h8v16H20.8V20.8z"/></svg>
+
+      <div id="testiViewport" class="relative min-h-[9rem] md:min-h-[8rem]">
+        <blockquote id="testiQuote" class="font-display text-2xl md:text-3xl leading-snug text-black">
+        </blockquote>
+      </div>
+      <p id="testiName" class="mt-6 text-teal-700 font-medium text-lg"></p>
+
+      <div class="mt-10 flex items-center justify-center gap-6">
+        <button id="testiPrev" aria-label="Vorige ervaring" class="w-11 h-11 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-700">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+        </button>
+        <div id="testiDots" class="flex items-center gap-2"></div>
+        <button id="testiNext" aria-label="Volgende ervaring" class="w-11 h-11 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-700">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="bg-mist py-20 md:py-28">
+  <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12">
+    <div data-reveal>
+      <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Neem contact op</h2>
+      <p class="mt-4 text-ink-700 leading-relaxed max-w-md">
+        Neem contact op voor een gratis, vrijblijvende inzichtsessie. Ik hoor graag hoe het met je gaat.
+      </p>
+
+      <dl class="mt-8 space-y-5 text-ink-700">
+        <div class="flex gap-4">
+          <dt class="w-6 shrink-0 text-teal-700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></dt>
+          <dd>Kruisspin 54, 7559 EM Hengelo</dd>
+        </div>
+        <div class="flex gap-4">
+          <dt class="w-6 shrink-0 text-teal-700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></dt>
+          <dd><a href="tel:0654790117" class="hover:text-teal-700 transition-colors">06 54 79 01 17</a></dd>
+        </div>
+        <div class="flex gap-4">
+          <dt class="w-6 shrink-0 text-teal-700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></dt>
+          <dd><a href="mailto:hallo@mindfulbijelise.nl" class="hover:text-teal-700 transition-colors">hallo@mindfulbijelise.nl</a></dd>
+        </div>
+      </dl>
+
+      <div class="mt-8 rounded-2xl overflow-hidden border border-black/10 card-shadow">
+        <iframe
+          src="https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1sKruisspin+54,+7559+EM+Hengelo!6i15"
+          title="Kaart met de locatie van Mindful bij Elise, Kruisspin 54, Hengelo"
+          class="w-full h-64 md:h-72 grayscale-[20%]" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+
+    <div class="rounded-3xl bg-white border border-black/10 p-9 md:p-11 card-shadow relative overflow-hidden" data-reveal>
+      <div class="relative z-10">
+        <h3 class="font-display text-2xl font-medium text-black">Vrijblijvende kennismaking</h3>
+        <p class="mt-3 text-ink-700 leading-relaxed">
+          Twijfel je nog? Een kort telefoongesprek of mailtje is voldoende om te ontdekken of
+          mindfulness bij jou past.
+        </p>
+
+        <div class="lens-wrap mt-6 rounded-2xl aspect-[16/10]" id="lensWrap">
+          <img src="assets/img/room-kennismaking.png" alt="De praktijkruimte waar de kennismaking plaatsvindt" class="w-full h-full object-cover" loading="lazy" />
+          <div class="lens-glass" id="lensGlass"></div>
+        </div>
+
+        <div class="mt-7 flex flex-col sm:flex-row gap-3">
+          <a href="mailto:hallo@mindfulbijelise.nl" class="btn-primary inline-flex justify-center items-center gap-2 rounded-full px-6 py-3 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+            Stuur een mail
+          </a>
+          <a href="tel:0654790117" class="inline-flex justify-center items-center gap-2 rounded-full border border-teal-700 text-teal-700 px-6 py-3 font-medium hover:bg-teal-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700">
+            Bel direct
+          </a>
+        </div>
+      </div>
+      <div class="absolute -right-10 -bottom-16 w-56 h-56 rounded-full bg-teal-100 blur-3xl" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-mist text-ink-700 pt-16 pb-8">
+  <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-4 gap-10 pb-12 border-b border-black/10">
+    <div>
+      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 w-auto" />
+      <p class="mt-3 text-sm leading-relaxed">Praktijk voor bewustwording en groei, gevestigd in Hengelo.</p>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Aanbod</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-kennismaking/" target="_blank" rel="noopener">Kennismaken met mindfulness</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/training-mindfulness-groep/" target="_blank" rel="noopener">Training mindfulness groep</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/training-mindfulness-individueel/" target="_blank" rel="noopener">Training individueel</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-wandel/" target="_blank" rel="noopener">Mindfulness wandeltraining</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Contact</h4>
+      <ul class="space-y-2 text-sm">
+        <li>Kruisspin 54, 7559 EM Hengelo</li>
+        <li><a class="hover:text-teal-700 transition-colors" href="tel:0654790117">06 54 79 01 17</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="mailto:hallo@mindfulbijelise.nl">hallo@mindfulbijelise.nl</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Volg</h4>
+      <div class="flex items-center gap-3">
+        <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-content mx-auto px-5 md:px-8 pt-6 flex flex-col sm:flex-row gap-3 justify-between text-xs text-ink-400">
+    <p>&copy; <span id="year"></span> Mindful bij Elise. KVK 83166211 · BTW NL003795036B98</p>
+    <div class="flex gap-4">
+      <a class="hover:text-teal-700 transition-colors" href="#">Algemene voorwaarden</a>
+      <a class="hover:text-teal-700 transition-colors" href="#">Privacyverklaring</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('hidden') === false;
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Morphing hero line (rotates through the calm prompts, anime.js: opacity/blur tween)
+  const phrases = [
+    'Hoe is het nu echt met jou?',
+    'Leven op de automatische piloot, of niet?',
+    'Hoe druk is het in je hoofd?',
+    'Wil je meer in het moment leven?',
+    'Hoe bewust beleef jij je leven?'
+  ];
+  const morphEl = document.getElementById('morphLine');
+  let phraseIndex = 0;
+
+  function cycleMorph() {
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    if (reduceMotion || typeof anime === 'undefined') {
+      morphEl.textContent = phrases[phraseIndex];
+      return;
+    }
+    anime({
+      targets: morphEl,
+      opacity: [1, 0],
+      filter: ['blur(0px)', 'blur(6px)'],
+      translateY: [0, -6],
+      duration: 500,
+      easing: 'easeInSine',
+      complete: () => {
+        morphEl.textContent = phrases[phraseIndex];
+        anime({
+          targets: morphEl,
+          opacity: [0, 1],
+          filter: ['blur(6px)', 'blur(0px)'],
+          translateY: [6, 0],
+          duration: 600,
+          easing: 'easeOutSine',
+        });
+      }
+    });
+  }
+  if (!reduceMotion) setInterval(cycleMorph, 5000);
+
+  // Wave breathing motion is a plain CSS animation (see #waveBobA/#waveBobB
+  // keyframes above) so it keeps running on the compositor thread and can't
+  // stall the way a rAF-driven JS tween can after the tab is backgrounded.
+
+  // Scroll reveal via IntersectionObserver (no scroll listeners)
+  const revealTargets = document.querySelectorAll('[data-reveal]');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  revealTargets.forEach(el => revealObserver.observe(el));
+
+  // Dia-style sweep reveal on the recognition headline
+  const sweepEl = document.querySelector('[data-sweep]');
+  if (sweepEl) {
+    const sweepObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in-view');
+          sweepObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    sweepObserver.observe(sweepEl);
+  }
+
+  // Aanbod: single tile expands into the 4 training cards on click
+  const aanbodToggle = document.getElementById('aanbodToggle');
+  const aanbodGrid = document.getElementById('aanbodGrid');
+  const aanbodCollapse = document.getElementById('aanbodCollapse');
+  const aanbodChevron = document.getElementById('aanbodChevron');
+
+  function openAanbod() {
+    aanbodToggle.setAttribute('aria-expanded', 'true');
+    if (reduceMotion || typeof anime === 'undefined') {
+      aanbodToggle.classList.add('hidden');
+      aanbodGrid.classList.remove('hidden');
+      return;
+    }
+    anime({
+      targets: aanbodToggle,
+      opacity: [1, 0],
+      scale: [1, 0.98],
+      duration: 250,
+      easing: 'easeInSine',
+      complete: () => {
+        aanbodToggle.classList.add('hidden');
+        aanbodGrid.classList.remove('hidden');
+        anime({
+          targets: aanbodGrid.querySelectorAll('.aanbod-card'),
+          opacity: [0, 1],
+          translateY: [24, 0],
+          delay: anime.stagger(90),
+          duration: 550,
+          easing: 'easeOutCubic',
+        });
+      }
+    });
+  }
+
+  function closeAanbod() {
+    aanbodToggle.setAttribute('aria-expanded', 'false');
+    aanbodGrid.classList.add('hidden');
+    aanbodToggle.classList.remove('hidden');
+    if (!reduceMotion && typeof anime !== 'undefined') {
+      anime({ targets: aanbodToggle, opacity: [0, 1], translateY: [10, 0], duration: 400, easing: 'easeOutCubic' });
+    }
+    aanbodToggle.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  aanbodToggle.setAttribute('aria-expanded', 'false');
+  aanbodToggle.addEventListener('click', openAanbod);
+  aanbodCollapse.addEventListener('click', closeAanbod);
+
+  // Young tree grows into the full tree in sync with the trainings opening/closing
+  const treeStage = document.getElementById('treeStage');
+  aanbodToggle.addEventListener('click', () => treeStage.classList.add('is-grown'));
+  aanbodCollapse.addEventListener('click', () => treeStage.classList.remove('is-grown'));
+
+  // Magnifying lens over the practice-room photo (kennismaking card)
+  const lensWrap = document.getElementById('lensWrap');
+  const lensGlass = document.getElementById('lensGlass');
+  const lensImg = lensWrap.querySelector('img');
+  const LENS_ZOOM = 2.2;
+  lensWrap.addEventListener('pointermove', (e) => {
+    const rect = lensWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    lensGlass.style.left = `${x - lensGlass.offsetWidth / 2}px`;
+    lensGlass.style.top = `${y - lensGlass.offsetHeight / 2}px`;
+    lensGlass.style.backgroundImage = `url('${lensImg.src}')`;
+    lensGlass.style.backgroundSize = `${rect.width * LENS_ZOOM}px ${rect.height * LENS_ZOOM}px`;
+    lensGlass.style.backgroundPosition = `${-x * LENS_ZOOM + lensGlass.offsetWidth / 2}px ${-y * LENS_ZOOM + lensGlass.offsetHeight / 2}px`;
+  });
+
+  // "Herken jij dit?" wave takeover: click the wave, it rises full-screen and
+  // reveals a quote. Scroll to exit forward (into #herkenning), or click the
+  // wave button inside the quote card to reverse the same wave back down.
+  const waveCta = document.getElementById('waveCta');
+  const waveFlood = document.getElementById('waveFlood');
+  const waveQuote = document.getElementById('waveQuote');
+  const waveQuoteClose = document.getElementById('waveQuoteClose');
+  const floodA = document.getElementById('floodA');
+  const floodB = document.getElementById('floodB');
+  const FLOOD_RISE = 620, FLOOD_STAGGER = 140, FLOOD_SETTLE = 60;
+  let waveOpen = false;
+
+  function onWaveExitScroll() { closeWave(); }
+  function onWaveExitKey(e) { if (['ArrowDown', 'PageDown', ' '].includes(e.key)) closeWave(); }
+
+  function openWave() {
+    if (waveOpen) return;
+    if (reduceMotion) {
+      document.getElementById('herkenning').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    waveOpen = true;
+    waveFlood.classList.remove('hidden');
+    // force a paint of the "just made visible, still translateY(100%)" state first,
+    // otherwise the browser has no start frame to transition from and floodA snaps up instantly
+    void waveFlood.offsetHeight;
+    floodA.classList.add('is-covering');
+    setTimeout(() => floodB.classList.add('is-covering'), FLOOD_STAGGER);
+    setTimeout(() => waveQuote.classList.add('is-visible'), FLOOD_RISE + FLOOD_STAGGER + FLOOD_SETTLE);
+    window.addEventListener('wheel', onWaveExitScroll, { passive: true, once: true });
+    window.addEventListener('touchmove', onWaveExitScroll, { passive: true, once: true });
+    window.addEventListener('keydown', onWaveExitKey);
+  }
+
+  function closeWave() {
+    if (!waveOpen) return;
+    waveOpen = false;
+    window.removeEventListener('wheel', onWaveExitScroll);
+    window.removeEventListener('touchmove', onWaveExitScroll);
+    window.removeEventListener('keydown', onWaveExitKey);
+    waveQuote.classList.remove('is-visible');
+
+    // always reverse the same way it came, whether closed via the button or by scrolling past it
+    floodB.classList.remove('is-covering');
+    setTimeout(() => floodA.classList.remove('is-covering'), 120);
+    setTimeout(() => {
+      waveFlood.classList.add('hidden');
+      floodA.classList.remove('is-covering', 'is-receding');
+      floodB.classList.remove('is-covering', 'is-receding');
+    }, 620 + 120 + 60);
+  }
+
+  waveCta.addEventListener('click', openWave);
+  waveQuoteClose.addEventListener('click', closeWave);
+
+  // Testimonials: click-through slider (no autoplay), large readable text
+  const testimonials = [
+    { quote: 'Juist door de persoonlijke aanpak van Elise en het enthousiasme waarmee zij de training verzorgt, voelde ik mij snel op mijn gemak.', name: 'Martijn' },
+    { quote: 'Deze training heeft mij geleerd om uit de waan van de dag te stappen en te voelen hoe het echt met mij gaat.', name: 'Janny' },
+    { quote: 'Elise weet een rustige en vertrouwelijke sfeer te creëren, waardoor de sessies optimaal tot hun recht komen.', name: 'Paul' },
+    { quote: 'Deze training heeft mij geleerd om in het dagelijkse leven rustmomenten te nemen door oefeningen en meditatie.', name: 'Marlice' },
+    { quote: 'Gedurende de training begon ik te voelen dat het me rust gaf. Het bracht vriendelijkheid, naar en in mezelf.', name: 'Marjan' },
+    { quote: 'Ik hoop dat je nog meer mensen eenzelfde mooie ervaring mee mag geven.', name: 'Nienke' },
+  ];
+
+  const testiQuote = document.getElementById('testiQuote');
+  const testiName = document.getElementById('testiName');
+  const testiDots = document.getElementById('testiDots');
+  const testiPrev = document.getElementById('testiPrev');
+  const testiNext = document.getElementById('testiNext');
+  let testiIndex = 0;
+
+  testimonials.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.setAttribute('aria-label', `Ga naar ervaring ${i + 1}`);
+    dot.className = 'w-2.5 h-2.5 rounded-full transition-colors';
+    dot.addEventListener('click', () => showTesti(i));
+    testiDots.appendChild(dot);
+  });
+
+  function renderTesti() {
+    const t = testimonials[testiIndex];
+    testiQuote.textContent = `“${t.quote}”`;
+    testiName.textContent = t.name;
+    [...testiDots.children].forEach((dot, i) => {
+      dot.classList.toggle('bg-teal-700', i === testiIndex);
+      dot.classList.toggle('bg-black/15', i !== testiIndex);
+    });
+  }
+
+  function showTesti(nextIndex, direction = 1) {
+    if (nextIndex === testiIndex) return;
+    testiIndex = nextIndex;
+    if (reduceMotion || typeof anime === 'undefined') {
+      renderTesti();
+      return;
+    }
+    anime({
+      targets: [testiQuote, testiName],
+      opacity: [1, 0],
+      translateX: [0, -18 * direction],
+      duration: 200,
+      easing: 'easeInSine',
+      complete: () => {
+        renderTesti();
+        anime({
+          targets: [testiQuote, testiName],
+          opacity: [0, 1],
+          translateX: [18 * direction, 0],
+          duration: 400,
+          easing: 'easeOutCubic',
+        });
+      }
+    });
+  }
+
+  testiPrev.addEventListener('click', () => showTesti((testiIndex - 1 + testimonials.length) % testimonials.length, -1));
+  testiNext.addEventListener('click', () => showTesti((testiIndex + 1) % testimonials.length, 1));
+
+  renderTesti();
+</script>
+
+</body>
+</html>
