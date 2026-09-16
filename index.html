@@ -52,8 +52,9 @@
   html { scroll-behavior: smooth; }
   body {
     font-family: 'Outfit', sans-serif;
+    font-weight: 300;
     background: #ffffff;
-    color: #000000;
+    color: rgb(64, 64, 64);
   }
   h1, h2, h3, .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
 
@@ -411,7 +412,7 @@
           </span>
           <span class="flex-1 relative z-10">
             <span class="block font-display text-xl md:text-2xl font-medium">Bekijk de trainingen</span>
-            <span class="block mt-1 text-white/75 text-sm md:text-base">Vier vormen van mindfulness, van kennismaking tot verdieping.</span>
+            <span class="block mt-1 text-white/75 text-sm md:text-base">Vijf vormen van mindfulness, van kennismaking tot verdieping.</span>
           </span>
           <svg id="aanbodChevron" class="cta-chevron shrink-0 relative z-10" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </button>
@@ -429,34 +430,37 @@
       <button id="aanbodCollapse" class="mb-6 text-sm text-teal-700 hover:text-teal-600 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-700 rounded">
         Toon minder
       </button>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 
-        <div class="aanbod-card bento-card rounded-3xl bg-teal-700 text-white p-8 md:p-10 flex flex-col justify-between min-h-[300px] card-shadow md:col-span-2 md:row-span-2">
-          <img src="assets/img/icon-groep.svg" alt="" class="w-12 h-12 brightness-0 invert opacity-90" loading="lazy" width="48" height="48" />
-          <div>
-            <h3 class="font-display text-2xl font-medium">Training Mindfulness Groep</h3>
-            <p class="mt-2 text-white/80 leading-relaxed">Acht weken samen leren vertragen, in een kleine groep met persoonlijke aandacht.</p>
-            <a href="#" class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium hover:gap-2.5 transition-all">
-              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="aanbod-card bento-card rounded-3xl bg-teal-50 p-7 flex flex-col justify-between min-h-[300px]">
-          <img src="assets/img/icon-kennismaken.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
-          <div>
-            <h3 class="font-display text-xl font-medium text-black">Kennismaken met mindfulness</h3>
-            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Een eerste, vrijblijvend gesprek.</p>
+        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
+          <img src="assets/img/kennismaken-workshop.jpg" alt="Bos met veldbloemen, sfeerbeeld voor de kennismakingsworkshop" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          <div class="p-7 flex flex-col flex-1">
+            <img src="assets/img/icon-kennismaken.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
+            <h3 class="mt-4 font-display text-xl font-medium text-black">Workshop kennismaken met mindfulness</h3>
+            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Een losse bijeenkomst waarin je ervaart wat aandachttraining doet en of het bij je past.</p>
             <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
               Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
         </div>
 
-        <div class="aanbod-card bento-card rounded-3xl bg-mist p-7 flex flex-col justify-between min-h-[300px]">
-          <img src="assets/img/icon-individueel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
-          <div>
-            <h3 class="font-display text-xl font-medium text-black">Training Individueel</h3>
+        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
+          <img src="assets/img/training-groep.webp" alt="Bloemen in de praktijkruimte, sfeerbeeld voor de groepstraining" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          <div class="p-7 flex flex-col flex-1">
+            <img src="assets/img/icon-groep.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
+            <h3 class="mt-4 font-display text-xl font-medium text-black">Training Mindfulness Groep</h3>
+            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Acht weken samen leren vertragen, in een kleine groep met persoonlijke aandacht.</p>
+            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
+          <img src="assets/img/training-individueel.webp" alt="Rustige praktijkruimte, sfeerbeeld voor de individuele training" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          <div class="p-7 flex flex-col flex-1">
+            <img src="assets/img/icon-individueel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
+            <h3 class="mt-4 font-display text-xl font-medium text-black">Training Individueel</h3>
             <p class="mt-2 text-ink-600 text-sm leading-relaxed">Op je eigen tempo, één op één begeleid.</p>
             <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
               Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -464,12 +468,25 @@
           </div>
         </div>
 
-        <div class="aanbod-card bento-card rounded-3xl bg-teal-50 p-7 flex items-center gap-6 min-h-[150px] md:col-span-2">
-          <img src="assets/img/icon-wandel.svg" alt="" class="w-11 h-11 shrink-0" loading="lazy" width="44" height="44" />
-          <div>
-            <h3 class="font-display text-xl font-medium text-black">Mindfulness Wandeltraining</h3>
-            <p class="mt-1 text-ink-600 text-sm leading-relaxed">Bewust bewegen in de buitenlucht.</p>
-            <a href="#" class="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
+          <img src="assets/img/shinrin-yoku.webp" alt="Bamboebos van onderaf gezien, sfeerbeeld voor Shinrin-yoku" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          <div class="p-7 flex flex-col flex-1">
+            <img src="assets/img/icon-wandel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
+            <h3 class="mt-4 font-display text-xl font-medium text-black">Shinrin-yoku</h3>
+            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Bewust wandelen tussen de bomen: de Japanse kunst van bosbaden voor rust en herstel.</p>
+            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
+          <img src="assets/img/iopt-individueel.webp" alt="Rustige praktijkruimte, sfeerbeeld voor IoPT individueel" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          <div class="p-7 flex flex-col flex-1">
+            <img src="assets/img/icon-individueel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
+            <h3 class="mt-4 font-display text-xl font-medium text-black">IoPT Individueel</h3>
+            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Werken met je innerlijke deelpersoonlijkheden, één op één, voor diepere zelfkennis en heling.</p>
+            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
               Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
@@ -611,10 +628,11 @@
     <div>
       <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Aanbod</h4>
       <ul class="space-y-2 text-sm">
-        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-kennismaking/" target="_blank" rel="noopener">Kennismaken met mindfulness</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-kennismaking/" target="_blank" rel="noopener">Workshop kennismaken met mindfulness</a></li>
         <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/training-mindfulness-groep/" target="_blank" rel="noopener">Training mindfulness groep</a></li>
         <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/training-mindfulness-individueel/" target="_blank" rel="noopener">Training individueel</a></li>
-        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-wandel/" target="_blank" rel="noopener">Mindfulness wandeltraining</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-wandel/" target="_blank" rel="noopener">Shinrin-yoku</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="#aanbod">IoPT individueel</a></li>
       </ul>
     </div>
     <div>
