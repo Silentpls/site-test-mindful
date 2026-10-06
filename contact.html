@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact | Mindful bij Elise</title>
+<meta name="description" content="Neem contact op met Mindful bij Elise voor een gratis, vrijblijvende kennismaking." />
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Outfit:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          teal: { DEFAULT: '#5699b2', 50: '#eef6f8', 100: '#d9edf1', 300: '#8fc0d1', 500: '#5699b2', 600: '#3f7f98', 700: '#2e6478' },
+          ink: { DEFAULT: '#000000', 700: '#404040', 600: '#525252', 400: '#707070' },
+          mist: '#f1eee1',
+        },
+        fontFamily: { display: ['"Bricolage Grotesque"', 'sans-serif'], body: ['Outfit', 'sans-serif'] },
+        maxWidth: { 'content': '1400px' },
+      },
+    },
+  }
+</script>
+
+<style>
+  :root { color-scheme: light; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Outfit', sans-serif; font-weight: 300; background: #ffffff; color: rgb(64, 64, 64); }
+  h1, h2, h3, .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+  ::selection { background: #5699b2; color: #ffffff; }
+
+  header { background: transparent; }
+  .header-bg {
+    position: absolute; inset: 0; z-index: -1;
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,.1); box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    transform: translateY(-100%);
+    transition: transform .45s cubic-bezier(.16,1,.3,1);
+  }
+  header.is-scrolled .header-bg { transform: translateY(0); }
+  [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  [data-reveal].is-in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; } }
+  .btn-primary { background: #2e6478; color: #ffffff; }
+  .btn-primary:hover { background: #244f5f; }
+  .btn-primary:active { transform: scale(0.98); }
+  .card-shadow { box-shadow: 0 20px 45px -25px rgba(0,0,0,0.18); }
+
+  .lens-wrap { position: relative; overflow: hidden; cursor: zoom-in; touch-action: none; }
+  .lens-glass {
+    position: absolute; width: 130px; height: 130px; border-radius: 50%;
+    border: 3px solid #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    pointer-events: none; opacity: 0; transition: opacity .15s ease;
+    background-repeat: no-repeat;
+  }
+  .lens-wrap:hover .lens-glass { opacity: 1; }
+</style>
+</head>
+
+<body class="bg-white text-black antialiased overflow-x-hidden">
+
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:bg-black focus:text-white focus:px-4 focus:py-2 focus:rounded">Naar inhoud</a>
+
+<header class="fixed top-0 inset-x-0 z-40">
+  <div class="header-bg" aria-hidden="true"></div>
+  <nav class="max-w-content mx-auto h-16 md:h-[72px] px-5 md:px-8 flex items-center justify-between">
+    <a href="index.html" class="shrink-0 flex items-center">
+      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 md:h-10 w-auto" />
+    </a>
+    <ul class="hidden lg:flex items-center gap-8 font-body text-[15px] text-ink-700">
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="index.html#aanbod">Aanbod</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="mindfulness.html">Mindfulness</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="elise.html">Elise</a></li>
+      <li><a class="text-teal-700 rounded" href="contact.html" aria-current="page">Contact</a></li>
+    </ul>
+    <div class="flex items-center gap-2">
+      <div class="hidden md:flex items-center gap-1 pr-2 mr-1 border-r border-black/10">
+        <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+      </div>
+      <a href="mailto:hallo@mindfulbijelise.nl" class="hidden sm:inline-flex btn-primary rounded-full px-5 py-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Maak een afspraak</a>
+      <button id="menuBtn" aria-label="Open menu" aria-expanded="false" class="lg:hidden grid place-items-center w-11 h-11 rounded-full hover:bg-black/5 transition-colors">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path id="menuIcon" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="lg:hidden hidden border-t border-black/10 bg-white px-5 pb-6 pt-2">
+    <ul class="flex flex-col gap-1 font-body text-base">
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="index.html#aanbod">Aanbod</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="mindfulness.html">Mindfulness</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="elise.html">Elise</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center text-teal-700" href="contact.html" aria-current="page">Contact</a></li>
+      <li class="pt-2"><a href="tel:0654790117" class="block py-3 min-h-[44px] flex items-center text-teal-700">06 54 79 01 17</a></li>
+    </ul>
+    <div class="flex items-center gap-3 pt-3 mt-2 border-t border-black/10">
+      <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+      <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+      <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="pt-16 md:pt-[72px]">
+
+  <!-- INTRO -->
+  <section class="bg-mist py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8 max-w-2xl" data-reveal>
+      <p class="text-sm font-medium tracking-wide uppercase text-teal-700">Contact</p>
+      <h1 class="mt-3 font-display font-semibold text-4xl md:text-5xl text-black leading-tight">Neem contact op</h1>
+      <p class="mt-5 text-ink-700 leading-relaxed">
+        Neem contact op voor een gratis, vrijblijvende inzichtsessie. Ik hoor graag hoe het met je gaat.
+      </p>
+    </div>
+  </section>
+
+  <!-- DETAILS + KAART / KENNISMAKING -->
+  <section class="bg-white py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12">
+      <div data-reveal>
+        <dl class="space-y-5 text-ink-700">
+          <div class="flex gap-4">
+            <dt class="w-6 shrink-0 text-teal-700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></dt>
+            <dd>Kruisspin 54, 7559 EM Hengelo</dd>
+          </div>
+          <div class="flex gap-4">
+            <dt class="w-6 shrink-0 text-teal-700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></dt>
+            <dd><a href="tel:0654790117" class="hover:text-teal-700 transition-colors">06 54 79 01 17</a></dd>
+          </div>
+          <div class="flex gap-4">
+            <dt class="w-6 shrink-0 text-teal-700"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></dt>
+            <dd><a href="mailto:hallo@mindfulbijelise.nl" class="hover:text-teal-700 transition-colors">hallo@mindfulbijelise.nl</a></dd>
+          </div>
+        </dl>
+
+        <div class="mt-8 rounded-2xl overflow-hidden border border-black/10 card-shadow">
+          <iframe
+            src="https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1sKruisspin+54,+7559+EM+Hengelo!6i15"
+            title="Kaart met de locatie van Mindful bij Elise, Kruisspin 54, Hengelo"
+            class="w-full h-64 md:h-72 grayscale-[20%]" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="rounded-3xl bg-mist p-9 md:p-11 card-shadow relative overflow-hidden" data-reveal>
+        <div class="relative z-10">
+          <h2 class="font-display text-2xl font-medium text-black">Vrijblijvende kennismaking</h2>
+          <p class="mt-3 text-ink-700 leading-relaxed">
+            Twijfel je nog? Een kort telefoongesprek of mailtje is voldoende om te ontdekken of
+            mindfulness bij jou past.
+          </p>
+
+          <div class="lens-wrap mt-6 rounded-2xl aspect-[16/10]" id="lensWrap">
+            <img src="assets/img/room-kennismaking.png" alt="De praktijkruimte waar de kennismaking plaatsvindt" class="w-full h-full object-cover" loading="lazy" />
+            <div class="lens-glass" id="lensGlass"></div>
+          </div>
+
+          <div class="mt-7 flex flex-col sm:flex-row gap-3">
+            <a href="mailto:hallo@mindfulbijelise.nl" class="btn-primary inline-flex justify-center items-center gap-2 rounded-full px-6 py-3 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+              Stuur een mail
+            </a>
+            <a href="tel:0654790117" class="inline-flex justify-center items-center gap-2 rounded-full border border-teal-700 text-teal-700 px-6 py-3 font-medium hover:bg-teal-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700">
+              Bel direct
+            </a>
+          </div>
+        </div>
+        <div class="absolute -right-10 -bottom-16 w-56 h-56 rounded-full bg-teal-100 blur-3xl" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-mist text-ink-700 pt-16 pb-8">
+  <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-4 gap-10 pb-12 border-b border-black/10">
+    <div>
+      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 w-auto" />
+      <p class="mt-3 text-sm leading-relaxed">Praktijk voor bewustwording en groei, gevestigd in Hengelo.</p>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Aanbod</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-kennismaking.html">Workshop kennismaken met mindfulness</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-groep.html">Training mindfulness groep</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-individueel.html">Training individueel</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-shinrin-yoku.html">Shinrin-yoku</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-iopt-individueel.html">IoPT individueel</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Contact</h4>
+      <ul class="space-y-2 text-sm">
+        <li>Kruisspin 54, 7559 EM Hengelo</li>
+        <li><a class="hover:text-teal-700 transition-colors" href="tel:0654790117">06 54 79 01 17</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="mailto:hallo@mindfulbijelise.nl">hallo@mindfulbijelise.nl</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Volg</h4>
+      <div class="flex items-center gap-3">
+        <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-content mx-auto px-5 md:px-8 pt-6 flex flex-col sm:flex-row gap-3 justify-between text-xs text-ink-400">
+    <p>&copy; <span id="year"></span> Mindful bij Elise. KVK 83166211 · BTW NL003795036B98</p>
+    <div class="flex gap-4">
+      <a class="hover:text-teal-700 transition-colors" href="#">Algemene voorwaarden</a>
+      <a class="hover:text-teal-700 transition-colors" href="#">Privacyverklaring</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header: transparent at top, white bar slides down on scroll
+  const siteHeader = document.querySelector('header');
+  function updateHeaderScroll() { siteHeader.classList.toggle('is-scrolled', window.scrollY > 40); }
+  updateHeaderScroll();
+  window.addEventListener('scroll', updateHeaderScroll, { passive: true });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('hidden') === false;
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }));
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const revealTargets = document.querySelectorAll('[data-reveal]');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-in-view'); revealObserver.unobserve(entry.target); }
+    });
+  }, { threshold: 0.15 });
+  revealTargets.forEach(el => revealObserver.observe(el));
+
+  const lensWrap = document.getElementById('lensWrap');
+  const lensGlass = document.getElementById('lensGlass');
+  const lensImg = lensWrap.querySelector('img');
+  const LENS_ZOOM = 2.2;
+  lensWrap.addEventListener('pointermove', (e) => {
+    const rect = lensWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    lensGlass.style.left = `${x - lensGlass.offsetWidth / 2}px`;
+    lensGlass.style.top = `${y - lensGlass.offsetHeight / 2}px`;
+    lensGlass.style.backgroundImage = `url('${lensImg.src}')`;
+    lensGlass.style.backgroundSize = `${rect.width * LENS_ZOOM}px ${rect.height * LENS_ZOOM}px`;
+    lensGlass.style.backgroundPosition = `${-x * LENS_ZOOM + lensGlass.offsetWidth / 2}px ${-y * LENS_ZOOM + lensGlass.offsetHeight / 2}px`;
+  });
+</script>
+
+</body>
+</html>

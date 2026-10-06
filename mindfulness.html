@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mindfulness | Mindful bij Elise</title>
+<meta name="description" content="Wat mindfulness is, voor wie het werkt en waarvoor het wordt ingezet. Plus uitleg over vergoeding en de VMBN-registratie van Elise Wagelaar." />
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Outfit:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          teal: {
+            DEFAULT: '#5699b2',
+            50: '#eef6f8',
+            100: '#d9edf1',
+            300: '#8fc0d1',
+            500: '#5699b2',
+            600: '#3f7f98',
+            700: '#2e6478',
+          },
+          ink: {
+            DEFAULT: '#000000',
+            700: '#404040',
+            600: '#525252',
+            400: '#707070',
+          },
+          mist: '#f1eee1',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'sans-serif'],
+          body: ['Outfit', 'sans-serif'],
+        },
+        maxWidth: {
+          'content': '1400px',
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  :root { color-scheme: light; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    background: #ffffff;
+    color: rgb(64, 64, 64);
+  }
+  h1, h2, h3, .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+
+  ::selection { background: #5699b2; color: #ffffff; }
+
+  header { background: transparent; }
+  .header-bg {
+    position: absolute; inset: 0; z-index: -1;
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,.1); box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    transform: translateY(-100%);
+    transition: transform .45s cubic-bezier(.16,1,.3,1);
+  }
+  header.is-scrolled .header-bg { transform: translateY(0); }
+
+  [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  [data-reveal].is-in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  .btn-primary { background: #2e6478; color: #ffffff; }
+  .btn-primary:hover { background: #244f5f; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .card-shadow { box-shadow: 0 20px 45px -25px rgba(0,0,0,0.18); }
+
+  .pill { transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease, border-color .25s ease; }
+  .pill:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -20px rgba(0,0,0,0.25); border-color: #2e6478; }
+
+  /* --- Learning journey: connecting line fills in on scroll, dots open a lesson panel --- */
+  #journeyFill { width: 0; transition: width 1.3s cubic-bezier(.16,1,.3,1); }
+  .journey.is-in-view #journeyFill { width: 100%; }
+  .journey-dot {
+    position: relative; z-index: 10; width: 2.75rem; height: 2.75rem; border-radius: 9999px;
+    background: #ffffff; border: 2px solid #2e6478; color: #2e6478; cursor: pointer;
+    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600;
+    display: grid; place-items: center; transition: background-color .25s ease, color .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  @media (max-width: 767px) {
+    .journey-dot { position: absolute; left: 0; top: 0; }
+  }
+  .journey-dot:hover { transform: scale(1.08); box-shadow: 0 10px 24px -10px rgba(46,100,120,.5); }
+  .journey-dot.is-active { background: #2e6478; color: #ffffff; }
+  .journey-panel { animation: journey-panel-in .3s ease; }
+  @keyframes journey-panel-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* --- "you can click this" affordance: a small plus badge + a pulsing ring until the
+     visitor has discovered the interaction once, since people were scrolling straight past
+     plain numbered dots without realizing they were buttons --- */
+  .journey-dot-plus {
+    position: absolute; right: -3px; bottom: -3px; width: 1.15rem; height: 1.15rem; border-radius: 9999px;
+    background: #2e6478; color: #ffffff; box-shadow: 0 0 0 2px #ffffff;
+    display: grid; place-items: center; font-size: .7rem; line-height: 1; pointer-events: none;
+    transition: transform .3s cubic-bezier(.16,1,.3,1), background-color .25s ease;
+  }
+  .journey-dot.is-active .journey-dot-plus { transform: rotate(135deg); background: #1f4a58; }
+  @media (prefers-reduced-motion: no-preference) {
+    .journey:not(.has-interacted) .journey-dot::after {
+      content: ""; position: absolute; inset: -7px; border-radius: 9999px;
+      border: 1.5px solid rgba(46,100,120,.6); animation: journey-ping 2.1s cubic-bezier(0,0,.2,1) infinite;
+      pointer-events: none;
+    }
+  }
+  @keyframes journey-ping { 0% { transform: scale(1); opacity: .75; } 100% { transform: scale(1.55); opacity: 0; } }
+  .journey-hint {
+    display: inline-flex; align-items: center; gap: .3rem; margin-top: .3rem;
+    color: #2e6478; font-size: .75rem; font-weight: 500; transition: opacity .2s ease;
+  }
+  .journey-step.is-open .journey-hint { display: none; }
+
+  /* --- Klacht-naar-effect: a "Mindfulness" switch flips a cloud of word-chips from
+     negative to positive. Both words always sit in the DOM, stacked in the same grid
+     cell (so the chip's own width is just the natural max of the two, no JS measuring,
+     no text-swap reflow) and cross-fade via opacity/transform. Every property animated
+     is transform/opacity/background-color only (compositor-friendly, no layout jank),
+     and the stagger across chips is plain CSS transition-delay via --i, not JS timers,
+     which is what made the first version choppy. --- */
+  .flip-chip {
+    position: relative; display: inline-grid; border-radius: 9999px;
+    background: #ffffff; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 6px 16px -10px rgba(0,0,0,.18);
+    transition: background-color .5s cubic-bezier(.4,0,.2,1) calc(var(--i,0) * 60ms),
+                border-color .5s cubic-bezier(.4,0,.2,1) calc(var(--i,0) * 60ms),
+                box-shadow .5s cubic-bezier(.4,0,.2,1) calc(var(--i,0) * 60ms),
+                transform .5s cubic-bezier(.34,1.56,.64,1) calc(var(--i,0) * 60ms);
+  }
+  #flipCloud.is-pos .flip-chip { background: #2e6478; border-color: #2e6478; box-shadow: 0 10px 24px -10px rgba(46,100,120,.5); transform: scale(1.03); }
+  .flip-chip-face {
+    grid-area: 1 / 1; padding: .55rem 1.15rem; white-space: nowrap; pointer-events: none;
+    font-size: .92rem; font-weight: 500;
+    transition: opacity .45s ease calc(var(--i,0) * 60ms), transform .45s cubic-bezier(.34,1.56,.64,1) calc(var(--i,0) * 60ms);
+  }
+  .flip-chip-neg { color: rgba(64,64,64,.8); opacity: 1; transform: scale(1) rotate(0deg); }
+  .flip-chip-pos { color: #ffffff; opacity: 0; transform: scale(.7) rotate(10deg); }
+  #flipCloud.is-pos .flip-chip-neg { opacity: 0; transform: scale(.7) rotate(-10deg); }
+  #flipCloud.is-pos .flip-chip-pos { opacity: 1; transform: scale(1) rotate(0deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .flip-chip, .flip-chip-face { transition-duration: .01ms !important; transition-delay: 0s !important; }
+  }
+
+  /* --- "Mindfulness" on/off switch, replaces the earlier button-with-changing-label --- */
+  .mindful-switch {
+    position: relative; width: 4.25rem; height: 2.35rem; border-radius: 9999px; border: none; padding: 0;
+    background: #ded8c4; cursor: pointer; box-shadow: inset 0 2px 6px rgba(0,0,0,.12);
+    transition: background-color .5s cubic-bezier(.4,0,.2,1);
+  }
+  .mindful-switch.is-on { background: #2e6478; }
+  .mindful-switch-thumb {
+    position: absolute; top: .25rem; left: .25rem; width: 1.85rem; height: 1.85rem; border-radius: 50%;
+    background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.25); display: grid; place-items: center; color: #2e6478;
+    transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .mindful-switch.is-on .mindful-switch-thumb { transform: translateX(1.9rem); }
+  .mindful-switch-thumb svg { opacity: 0; transform: scale(.5) rotate(-30deg); transition: opacity .3s ease .12s, transform .3s ease .12s; }
+  .mindful-switch.is-on .mindful-switch-thumb svg { opacity: 1; transform: scale(1) rotate(0deg); }
+</style>
+</head>
+
+<body class="bg-white text-black antialiased overflow-x-hidden">
+
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:bg-black focus:text-white focus:px-4 focus:py-2 focus:rounded">Naar inhoud</a>
+
+<!-- NAV: logo and other items always return to the homepage; this page is reached via "Mindfulness" -->
+<header class="fixed top-0 inset-x-0 z-40">
+  <div class="header-bg" aria-hidden="true"></div>
+  <nav class="max-w-content mx-auto h-16 md:h-[72px] px-5 md:px-8 flex items-center justify-between">
+    <a href="index.html" class="shrink-0 flex items-center">
+      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 md:h-10 w-auto" />
+    </a>
+
+    <ul class="hidden lg:flex items-center gap-8 font-body text-[15px] text-ink-700">
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="index.html#aanbod">Aanbod</a></li>
+      <li><a class="text-teal-700 rounded" href="mindfulness.html" aria-current="page">Mindfulness</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="elise.html">Elise</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="flex items-center gap-2">
+      <div class="hidden md:flex items-center gap-1 pr-2 mr-1 border-r border-black/10">
+        <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+      </div>
+      <a href="contact.html" class="hidden sm:inline-flex btn-primary rounded-full px-5 py-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+        Maak een afspraak
+      </a>
+      <button id="menuBtn" aria-label="Open menu" aria-expanded="false" class="lg:hidden grid place-items-center w-11 h-11 rounded-full hover:bg-black/5 transition-colors">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path id="menuIcon" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobileMenu" class="lg:hidden hidden border-t border-black/10 bg-white px-5 pb-6 pt-2">
+    <ul class="flex flex-col gap-1 font-body text-base">
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="index.html#aanbod">Aanbod</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center text-teal-700" href="mindfulness.html" aria-current="page">Mindfulness</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="elise.html">Elise</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="contact.html">Contact</a></li>
+      <li class="pt-2"><a href="tel:0654790117" class="block py-3 min-h-[44px] flex items-center text-teal-700">06 54 79 01 17</a></li>
+    </ul>
+    <div class="flex items-center gap-3 pt-3 mt-2 border-t border-black/10">
+      <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+      <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+      <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="pt-16 md:pt-[72px]">
+
+  <!-- INTRO -->
+  <section class="bg-mist py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+      <div data-reveal>
+        <p class="text-sm font-medium tracking-wide uppercase text-teal-700">Mindfulness</p>
+        <h1 class="mt-3 font-display font-semibold text-4xl md:text-5xl text-black leading-tight">Wat is mindfulness?</h1>
+        <p class="mt-5 text-ink-700 leading-[1.75] max-w-md">
+          Mindfulness is aandacht geven aan het huidige moment, bewust en zonder het meteen te
+          willen veranderen of te beoordelen. Door het toe te passen in je dagelijks leven
+          ontwikkel je zowel mentale veerkracht als een flexibelere, mildere levenshouding.
+        </p>
+      </div>
+      <div class="relative" data-reveal>
+        <div class="rounded-[2rem] overflow-hidden aspect-[4/5] max-w-md mx-auto card-shadow">
+          <img src="assets/img/room-kennismaking.png" alt="De praktijkruimte van Mindful bij Elise, ingericht als rustige meditatieruimte" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAT LEER JE: interactieve reis, klik op een bolletje voor de les -->
+  <section class="bg-white py-16 md:py-24 overflow-hidden">
+    <div class="max-w-content mx-auto px-5 md:px-8">
+      <div class="max-w-2xl" data-reveal>
+        <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Wat je leert</h2>
+        <p class="mt-4 text-ink-700 leading-relaxed">Vijf stappen op weg naar meer bewustzijn. Klik op een les voor meer uitleg.</p>
+      </div>
+
+      <div class="journey mt-16 relative" data-reveal>
+        <div class="hidden md:block absolute left-0 right-0 top-6 h-px bg-black/10" aria-hidden="true">
+          <div id="journeyFill" class="h-full bg-teal-700"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-y-10 md:gap-x-4 items-start">
+
+          <div class="journey-step relative pl-14 md:pl-0 md:text-center">
+            <div class="journey-vline md:hidden absolute left-3 top-12 bottom-[-2.5rem] w-px bg-black/10" aria-hidden="true"></div>
+            <button class="journey-dot" type="button" aria-expanded="false" data-target="les-1">1<span class="journey-dot-plus" aria-hidden="true">+</span></button>
+            <h3 class="mt-3 font-display text-base font-medium text-black">Hier en nu</h3>
+            <p class="journey-hint md:justify-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>Tik voor uitleg</p>
+            <div id="les-1" class="journey-panel hidden mt-3 text-left md:text-center">
+              <p class="text-sm text-ink-600 leading-relaxed">Je oefent met opmerken waar je aandacht naartoe dwaalt, en die keer op keer vriendelijk terugbrengen naar dit moment.</p>
+            </div>
+          </div>
+
+          <div class="journey-step relative pl-14 md:pl-0 md:text-center">
+            <div class="journey-vline md:hidden absolute left-3 top-12 bottom-[-2.5rem] w-px bg-black/10" aria-hidden="true"></div>
+            <button class="journey-dot" type="button" aria-expanded="false" data-target="les-2">2<span class="journey-dot-plus" aria-hidden="true">+</span></button>
+            <h3 class="mt-3 font-display text-base font-medium text-black">Uitzoomen</h3>
+            <p class="journey-hint md:justify-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>Tik voor uitleg</p>
+            <div id="les-2" class="journey-panel hidden mt-3 text-left md:text-center">
+              <p class="text-sm text-ink-600 leading-relaxed">Je leert een stap terug doen en het grotere geheel zien, in plaats van vast te zitten in één gedachte of gevoel.</p>
+            </div>
+          </div>
+
+          <div class="journey-step relative pl-14 md:pl-0 md:text-center">
+            <div class="journey-vline md:hidden absolute left-3 top-12 bottom-[-2.5rem] w-px bg-black/10" aria-hidden="true"></div>
+            <button class="journey-dot" type="button" aria-expanded="false" data-target="les-3">3<span class="journey-dot-plus" aria-hidden="true">+</span></button>
+            <h3 class="mt-3 font-display text-base font-medium text-black">Ruimte</h3>
+            <p class="journey-hint md:justify-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>Tik voor uitleg</p>
+            <div id="les-3" class="journey-panel hidden mt-3 text-left md:text-center">
+              <p class="text-sm text-ink-600 leading-relaxed">Er ontstaat ruimte tussen wat er gebeurt en je automatische reactie erop, in plaats van meteen te reageren.</p>
+            </div>
+          </div>
+
+          <div class="journey-step relative pl-14 md:pl-0 md:text-center">
+            <div class="journey-vline md:hidden absolute left-3 top-12 bottom-[-2.5rem] w-px bg-black/10" aria-hidden="true"></div>
+            <button class="journey-dot" type="button" aria-expanded="false" data-target="les-4">4<span class="journey-dot-plus" aria-hidden="true">+</span></button>
+            <h3 class="mt-3 font-display text-base font-medium text-black">Bewuste keuze</h3>
+            <p class="journey-hint md:justify-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>Tik voor uitleg</p>
+            <div id="les-4" class="journey-panel hidden mt-3 text-left md:text-center">
+              <p class="text-sm text-ink-600 leading-relaxed">In die ruimte maak je een bewustere keuze, passend bij wat je echt wilt, in plaats van automatisch te reageren.</p>
+            </div>
+          </div>
+
+          <div class="journey-step relative pl-14 md:pl-0 md:text-center">
+            <button class="journey-dot" type="button" aria-expanded="false" data-target="les-5">5<span class="journey-dot-plus" aria-hidden="true">+</span></button>
+            <h3 class="mt-3 font-display text-base font-medium text-black">Nieuw perspectief</h3>
+            <p class="journey-hint md:justify-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>Tik voor uitleg</p>
+            <div id="les-5" class="journey-panel hidden mt-3 text-left md:text-center">
+              <p class="text-sm text-ink-600 leading-relaxed">Het verandert blijvend hoe je naar jezelf en je omgeving kijkt, en hoe je daarop reageert.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <p class="mt-10 text-sm text-ink-600 leading-relaxed" data-reveal>
+        Jon Kabat-Zinn geldt als grondlegger van het (klinische) mindfulness-concept waar deze
+        trainingen op zijn gebaseerd.
+      </p>
+    </div>
+  </section>
+
+  <!-- VOOR WIE -->
+  <section class="bg-mist py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12 md:gap-16">
+      <div data-reveal>
+        <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Voor wie</h2>
+        <p class="mt-5 text-ink-700 leading-[1.75]">
+          Mindfulness is voor iedereen die meer rust en ontspanning wil ervaren en bewuster in het
+          leven wil staan. Er hoeven geen duidelijke klachten te zijn om een training te volgen:
+          het werkt ook goed preventief. In de praktijk komen zowel particulieren als werknemers,
+          soms via hun werkgever, bij Elise trainen.
+        </p>
+      </div>
+      <div data-reveal>
+        <h3 class="font-display text-xl font-medium text-black">Ook voor mannen</h3>
+        <p class="mt-4 text-ink-700 leading-[1.75]">
+          Mannen en vrouwen reageren fysiologisch anders op stress, onder meer door verschillen in
+          hormoonhuishouding en testosteronaanmaak. Dat maakt mindfulness minstens zo waardevol
+          voor mannen als voor vrouwen, ook al wordt het nog niet altijd als eerste optie gezien.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAARVOOR -->
+  <section class="bg-white py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8">
+      <div class="max-w-2xl" data-reveal>
+        <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Waarvoor mindfulness van pas komt</h2>
+        <p class="mt-4 text-ink-700 leading-relaxed">
+          Mindfulness kan zowel curatief, bij klachten, als preventief worden ingezet. Werkgevers
+          zetten het steeds vaker in als onderdeel van duurzame inzetbaarheid, niet alleen bij
+          verzuim.
+        </p>
+      </div>
+
+      <div class="mt-10 rounded-[2rem] bg-mist border border-black/10 px-6 py-14 md:p-16 text-center relative overflow-hidden" data-reveal>
+        <div class="absolute -left-16 -top-16 w-56 h-56 rounded-full bg-teal-100/70 blur-3xl" aria-hidden="true"></div>
+        <div class="absolute -right-12 -bottom-20 w-64 h-64 rounded-full bg-teal-300/30 blur-3xl" aria-hidden="true"></div>
+
+        <div class="relative">
+          <div id="flipCloud" class="flex flex-wrap items-center justify-center gap-2.5 md:gap-3 max-w-3xl mx-auto" aria-live="polite">
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Onrust</span><span class="flip-chip-face flip-chip-pos">Rust in je hoofd</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Vermoeidheid</span><span class="flip-chip-face flip-chip-pos">Energie</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Somberheid</span><span class="flip-chip-face flip-chip-pos">Lichtheid</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Gejaagdheid</span><span class="flip-chip-face flip-chip-pos">Kalmte</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Stress</span><span class="flip-chip-face flip-chip-pos">Ontspanning</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Burn-out</span><span class="flip-chip-face flip-chip-pos">Veerkracht</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Piekeren</span><span class="flip-chip-face flip-chip-pos">Helderheid</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Moeite met ontspannen</span><span class="flip-chip-face flip-chip-pos">Vanzelf tot rust komen</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Snel geïrriteerd of boos</span><span class="flip-chip-face flip-chip-pos">Innerlijke rust</span></span>
+            <span class="flip-chip"><span class="flip-chip-face flip-chip-neg">Werk/privé uit balans</span><span class="flip-chip-face flip-chip-pos">Balans</span></span>
+          </div>
+
+          <div class="mt-10 inline-flex items-center gap-4">
+            <span class="font-display font-semibold text-black text-lg">Mindfulness</span>
+            <button id="mindfulBtn" type="button" role="switch" aria-checked="false" aria-label="Mindfulness aan- of uitzetten" class="mindful-switch">
+              <span class="mindful-switch-thumb">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 16c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/><path d="M2 10c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"/></svg>
+              </span>
+            </button>
+          </div>
+          <p class="mt-3 text-xs text-ink-600" id="mindfulBtnHint">Zet aan en kijk wat er gebeurt</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERGOEDING -->
+  <section class="bg-mist py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8 max-w-2xl">
+      <h2 class="font-display font-semibold text-3xl md:text-4xl text-black" data-reveal>Vergoeding</h2>
+      <div class="mt-6 space-y-4 text-ink-700 leading-[1.75]" data-reveal>
+        <p>
+          De training wordt vergoed als je aanvullend verzekerd bent, en dat gaat niet ten koste
+          van je eigen risico. Mindfulness valt namelijk niet onder de basisverzekering: vergoeding
+          loopt via de aanvullende verzekering.
+        </p>
+        <p>
+          Elise is geregistreerd bij de VMBN als categorie 1 trainer, wat bij een aantal
+          verzekeraars een voorwaarde is voor vergoeding.
+        </p>
+        <p>
+          Ook werkgevers vergoeden de training regelmatig, bijvoorbeeld vanuit een opleidings-,
+          ontwikkel- of loopbaanbudget. Navragen bij HR loont, want dit budget heeft niet overal
+          dezelfde naam.
+        </p>
+        <p class="text-sm text-ink-600">
+          Voor de precieze voorwaarden en bedragen: check je eigen polis of neem contact op met je
+          verzekeraar, GGZ Nederland of een vergelijkbare instelling.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICERING -->
+  <section class="bg-white py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-[auto,1fr] gap-8 md:gap-12 items-center" data-reveal>
+      <img src="assets/img/vmbn-logo.png" alt="VMBN registratie-logo" class="w-28 md:w-32 h-auto mx-auto" loading="lazy" />
+      <div>
+        <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Certificering</h2>
+        <p class="mt-4 text-ink-700 leading-[1.75] max-w-xl">
+          Elise Wagelaar is geregistreerd bij de VMBN (Vereniging Mindfulness Based Trainers
+          Nederland) als categorie 1 trainer, de reguliere registratiecategorie voor
+          mindfulnesstrainers binnen de beroepsvereniging. Om geregistreerd te worden heeft een
+          trainer een erkende basisopleiding gevolgd die voldoet aan de eisen van de
+          beroepsvereniging. Voor jou betekent dit dat verzekeraars die vergoeding koppelen aan
+          een VMBN-registratie, de training bij Elise in principe vergoeden.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-mist py-16 md:py-24">
+    <div class="max-w-content mx-auto px-5 md:px-8 text-center max-w-2xl" data-reveal>
+      <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Klaar om te beginnen?</h2>
+      <p class="mt-4 text-ink-700 leading-relaxed">
+        Bekijk de trainingen of neem vrijblijvend contact op om te ontdekken wat bij jou past.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <a href="index.html#aanbod" class="btn-primary inline-flex items-center gap-2 rounded-full px-6 py-3 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+          Bekijk de trainingen
+        </a>
+        <a href="contact.html" class="inline-flex items-center gap-2 rounded-full border border-black/15 px-6 py-3 font-medium text-black hover:border-teal-700 hover:text-teal-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700">
+          Neem contact op
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-mist text-ink-700 pt-16 pb-8">
+  <div class="max-w-content mx-auto px-5 md:px-8 grid md:grid-cols-4 gap-10 pb-12 border-b border-black/10">
+    <div>
+      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 w-auto" />
+      <p class="mt-3 text-sm leading-relaxed">Praktijk voor bewustwording en groei, gevestigd in Hengelo.</p>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Aanbod</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-kennismaking.html">Workshop kennismaken met mindfulness</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-groep.html">Training mindfulness groep</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-individueel.html">Training individueel</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-shinrin-yoku.html">Shinrin-yoku</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-iopt-individueel.html">IoPT individueel</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Contact</h4>
+      <ul class="space-y-2 text-sm">
+        <li>Kruisspin 54, 7559 EM Hengelo</li>
+        <li><a class="hover:text-teal-700 transition-colors" href="tel:0654790117">06 54 79 01 17</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="mailto:hallo@mindfulbijelise.nl">hallo@mindfulbijelise.nl</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Volg</h4>
+      <div class="flex items-center gap-3">
+        <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 grid place-items-center rounded-full border border-black/15 hover:border-teal-700 hover:text-teal-700 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-content mx-auto px-5 md:px-8 pt-6 flex flex-col sm:flex-row gap-3 justify-between text-xs text-ink-400">
+    <p>&copy; <span id="year"></span> Mindful bij Elise. KVK 83166211 · BTW NL003795036B98</p>
+    <div class="flex gap-4">
+      <a class="hover:text-teal-700 transition-colors" href="#">Algemene voorwaarden</a>
+      <a class="hover:text-teal-700 transition-colors" href="#">Privacyverklaring</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  // Header: transparent at top, white bar slides down on scroll
+  const siteHeader = document.querySelector('header');
+  function updateHeaderScroll() { siteHeader.classList.toggle('is-scrolled', window.scrollY > 40); }
+  updateHeaderScroll();
+  window.addEventListener('scroll', updateHeaderScroll, { passive: true });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('hidden') === false;
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Klacht-naar-effect: a "Mindfulness" switch flips the whole word-cloud from negative
+  // to positive. Both words for every chip are already in the DOM (see the flip-chip CSS
+  // comment above) and the switch just toggles one class each on the cloud and the chips'
+  // --i-based stagger; the browser's own CSS transition engine drives all motion, so there's
+  // no per-chip JS timer to desync or stutter.
+  {
+    const switchBtn = document.getElementById('mindfulBtn');
+    const flipCloud = document.getElementById('flipCloud');
+    const hint = document.getElementById('mindfulBtnHint');
+    [...flipCloud.children].forEach((chip, i) => chip.style.setProperty('--i', i));
+    let on = false;
+
+    switchBtn.addEventListener('click', () => {
+      on = !on;
+      switchBtn.classList.toggle('is-on', on);
+      switchBtn.setAttribute('aria-checked', String(on));
+      flipCloud.classList.toggle('is-pos', on);
+      hint.textContent = on ? 'Dit is wat mindfulness kan doen' : 'Zet aan en kijk wat er gebeurt';
+    });
+  }
+
+  // Learning journey: click a dot to open its lesson, line fills in once visible
+  document.querySelectorAll('.journey-dot').forEach(btn => {
+    btn.addEventListener('click', () => {
+      journeyEl?.classList.add('has-interacted'); // first click found: stop pulsing every dot
+      const panel = document.getElementById(btn.dataset.target);
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      document.querySelectorAll('.journey-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.journey-dot').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+        b.classList.remove('is-active');
+        b.closest('.journey-step').classList.remove('is-open');
+      });
+      if (!isOpen) {
+        panel.classList.remove('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.classList.add('is-active');
+        btn.closest('.journey-step').classList.add('is-open');
+      }
+    });
+  });
+
+  const journeyEl = document.querySelector('.journey');
+  if (journeyEl) {
+    const journeyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          journeyEl.classList.add('is-in-view');
+          journeyObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    journeyObserver.observe(journeyEl);
+  }
+
+  // Fade-reveal sections on scroll
+  const revealTargets = document.querySelectorAll('[data-reveal]');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealTargets.forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>

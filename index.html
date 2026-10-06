@@ -6,6 +6,9 @@
 <title>Mindful bij Elise | Rust en balans vanuit verbinding</title>
 <meta name="description" content="Mindful bij Elise begeleidt je bij het vinden van rust en balans vanuit verbinding, met mindfulness training en coaching in Hengelo." />
 
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Outfit:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
@@ -59,6 +62,24 @@
   h1, h2, h3, .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
 
   ::selection { background: #5699b2; color: #ffffff; }
+
+  header { background: transparent; }
+  .header-bg {
+    position: absolute; inset: 0; z-index: -1;
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,.1); box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    transform: translateY(-100%);
+    transition: transform .45s cubic-bezier(.16,1,.3,1);
+  }
+  header.is-scrolled .header-bg { transform: translateY(0); }
+
+  .site-logo, .nav-links a, #menuBtn, .header-social a {
+    transition: color .3s ease, filter .3s ease, text-shadow .3s ease;
+  }
+  header.on-hero:not(.is-scrolled) .nav-links a,
+  header.on-hero:not(.is-scrolled) #menuBtn,
+  header.on-hero:not(.is-scrolled) .header-social a { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,.35); }
+  header.on-hero:not(.is-scrolled) .site-logo { filter: brightness(0) invert(1) drop-shadow(0 1px 4px rgba(0,0,0,.35)); }
 
   /* --- Wave (hero + section divider) ---
      Each layer is ONE svg element containing the wave path twice, at 200% width.
@@ -173,29 +194,6 @@
   .bento-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -20px rgba(46,100,120,0.35); }
   .bento-card:hover::before { opacity: 1; }
 
-  /* --- "Bekijk de trainingen" CTA: gradient tile, breathing icon, sweeping shine on hover --- */
-  .aanbod-cta {
-    position: relative; overflow: hidden;
-    background: linear-gradient(120deg, #2e6478, #3f7f98 55%, #5699b2);
-    box-shadow: 0 22px 48px -22px rgba(46,100,120,0.6);
-    transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease;
-  }
-  .aanbod-cta:hover { transform: translateY(-4px); box-shadow: 0 28px 60px -20px rgba(46,100,120,0.7); }
-  .aanbod-cta::before {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(115deg, transparent 25%, rgba(255,255,255,0.28) 40%, transparent 55%);
-    transform: translateX(-130%); transition: transform .9s ease;
-  }
-  .aanbod-cta:hover::before { transform: translateX(130%); }
-  .aanbod-cta .cta-icon { background: rgba(255,255,255,0.18); transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
-  .aanbod-cta:hover .cta-icon { transform: rotate(-8deg) scale(1.08); }
-  @media (prefers-reduced-motion: no-preference) {
-    .aanbod-cta .cta-icon svg { animation: cta-icon-breathe 3.2s ease-in-out infinite; }
-  }
-  @keyframes cta-icon-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
-  .aanbod-cta .cta-chevron { transition: transform .45s cubic-bezier(.16,1,.3,1); }
-  .aanbod-cta:hover .cta-chevron { transform: translateX(4px); }
-
   /* --- Magnifying "lens" hover on the kennismaking room photo --- */
   .lens-wrap { position: relative; overflow: hidden; cursor: zoom-in; touch-action: none; }
   .lens-glass {
@@ -216,27 +214,6 @@
   #elise .elise-bg::after { content: ""; position: absolute; inset: 0; background: rgba(241,238,225,0.35); }
   #elise > .max-w-content { position: relative; z-index: 1; }
 
-  /* --- Young tree grows into the full tree when trainings open ---
-     mix-blend-mode:multiply drops each drawing's white background into the
-     panel colour beneath it, so no image edge/frame is ever visible. */
-  .tree-stage { position: relative; }
-  .tree-stage img {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
-    mix-blend-mode: multiply;
-    transition: opacity 1.15s cubic-bezier(.22,1,.36,1), transform 1.15s cubic-bezier(.22,1,.36,1), filter 1.15s ease;
-  }
-  .tree-stage img.tree-young { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-  .tree-stage img.tree-full { opacity: 0; transform: scale(.72) translateY(8%); filter: blur(3px); }
-  .tree-stage.is-grown img.tree-young { opacity: 0; transform: scale(1.12) translateY(-6%); filter: blur(4px); }
-  .tree-stage.is-grown img.tree-full { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-  .tree-stage::after {
-    content: ""; position: absolute; inset: -18%; z-index: -1; border-radius: 50%; opacity: 0; pointer-events: none;
-    background: radial-gradient(closest-side, rgba(134,196,150,0.5), transparent 72%);
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .tree-stage.is-grown::after { animation: tree-grow-pulse 1.5s ease-out; }
-  }
-  @keyframes tree-grow-pulse { 0% { opacity: 0; transform: scale(.55); } 35% { opacity: 1; } 100% { opacity: 0; transform: scale(1.35); } }
 </style>
 </head>
 
@@ -245,26 +222,27 @@
 <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:bg-black focus:text-white focus:px-4 focus:py-2 focus:rounded">Naar inhoud</a>
 
 <!-- NAV -->
-<header class="fixed top-0 inset-x-0 z-40 bg-white/90 backdrop-blur border-b border-black/10">
+<header class="fixed top-0 inset-x-0 z-40 on-hero">
+  <div class="header-bg" aria-hidden="true"></div>
   <nav class="max-w-content mx-auto h-16 md:h-[72px] px-5 md:px-8 flex items-center justify-between">
     <a href="#" class="shrink-0 flex items-center">
-      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 md:h-10 w-auto" />
+      <img src="assets/img/logo.png" alt="Mindful bij Elise" class="h-9 md:h-10 w-auto site-logo" />
     </a>
 
-    <ul class="hidden lg:flex items-center gap-8 font-body text-[15px] text-ink-700">
+    <ul class="hidden lg:flex items-center gap-8 font-body text-[15px] text-ink-700 nav-links">
       <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#aanbod">Aanbod</a></li>
-      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#herkenning">Mindfulness</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="mindfulness.html">Mindfulness</a></li>
       <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#elise">Elise</a></li>
-      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="#contact">Contact</a></li>
+      <li><a class="hover:text-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-700 focus-visible:outline-offset-4 rounded" href="contact.html">Contact</a></li>
     </ul>
 
     <div class="flex items-center gap-2">
-      <div class="hidden md:flex items-center gap-1 pr-2 mr-1 border-r border-black/10">
+      <div class="hidden md:flex items-center gap-1 pr-2 mr-1 border-r border-black/10 header-social">
         <a href="https://www.facebook.com/Mindful-bij-Elise-108316981502066" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
         <a href="https://www.instagram.com/mindfulbijelise/" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
         <a href="https://nl.linkedin.com/in/elise-wagelaar-09811b37" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 grid place-items-center rounded-full text-ink-600 hover:text-teal-700 hover:bg-teal-50 transition-colors"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.9-2 3.8-2 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg></a>
       </div>
-      <a href="#contact" class="hidden sm:inline-flex btn-primary rounded-full px-5 py-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+      <a href="contact.html" class="hidden sm:inline-flex btn-primary rounded-full px-5 py-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
         Maak een afspraak
       </a>
       <button id="menuBtn" aria-label="Open menu" aria-expanded="false" class="lg:hidden grid place-items-center w-11 h-11 rounded-full hover:bg-black/5 transition-colors">
@@ -276,9 +254,9 @@
   <div id="mobileMenu" class="lg:hidden hidden border-t border-black/10 bg-white px-5 pb-6 pt-2">
     <ul class="flex flex-col gap-1 font-body text-base">
       <li><a class="block py-3 min-h-[44px] flex items-center" href="#aanbod">Aanbod</a></li>
-      <li><a class="block py-3 min-h-[44px] flex items-center" href="#herkenning">Mindfulness</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="mindfulness.html">Mindfulness</a></li>
       <li><a class="block py-3 min-h-[44px] flex items-center" href="#elise">Elise</a></li>
-      <li><a class="block py-3 min-h-[44px] flex items-center" href="#contact">Contact</a></li>
+      <li><a class="block py-3 min-h-[44px] flex items-center" href="contact.html">Contact</a></li>
       <li class="pt-2"><a href="tel:0654790117" class="block py-3 min-h-[44px] flex items-center text-teal-700">06 54 79 01 17</a></li>
     </ul>
     <div class="flex items-center gap-3 pt-3 mt-2 border-t border-black/10">
@@ -397,102 +375,77 @@
 <!-- AANBOD -->
 <section id="aanbod" class="bg-white py-20 md:py-28">
   <div class="max-w-content mx-auto px-5 md:px-8">
-    <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-      <div data-reveal>
-        <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Praktijk voor bewustwording en groei</h2>
-        <p class="mt-4 text-ink-700 leading-relaxed max-w-md">
-          Training en coaching voor iedereen die uit balans is geraakt, stress of onrust ervaart,
-          of wil werken aan persoonlijke ontwikkeling, in een veilige leeromgeving.
-        </p>
-
-        <!-- Collapsed state: single tile -->
-        <button id="aanbodToggle" class="aanbod-cta mt-10 w-full flex items-center gap-6 text-left rounded-3xl p-7 md:p-8 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700">
-          <span class="cta-icon w-14 h-14 shrink-0 rounded-full grid place-items-center">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          </span>
-          <span class="flex-1 relative z-10">
-            <span class="block font-display text-xl md:text-2xl font-medium">Bekijk de trainingen</span>
-            <span class="block mt-1 text-white/75 text-sm md:text-base">Vijf vormen van mindfulness, van kennismaking tot verdieping.</span>
-          </span>
-          <svg id="aanbodChevron" class="cta-chevron shrink-0 relative z-10" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </button>
-      </div>
-
-      <!-- Young tree grows into the full tree once the trainings are opened; no card/box, sits loose on the page -->
-      <div class="tree-stage relative aspect-square max-w-sm w-full mx-auto" id="treeStage" data-reveal>
-        <img src="assets/img/tree-young.jpg" alt="Jonge boom in de grond, symbool voor het begin van groei" class="tree-young" loading="lazy" />
-        <img src="assets/img/tree-full.jpg" alt="Volgroeide boom met vol blad, symbool voor bewustwording en groei" class="tree-full" loading="lazy" />
-      </div>
+    <div class="max-w-2xl" data-reveal>
+      <h2 class="font-display font-semibold text-3xl md:text-4xl text-black">Praktijk voor bewustwording en groei</h2>
+      <p class="mt-4 text-ink-700 leading-relaxed">
+        Training en coaching voor iedereen die uit balans is geraakt, stress of onrust ervaart,
+        of wil werken aan persoonlijke ontwikkeling, in een veilige leeromgeving.
+      </p>
     </div>
 
-    <!-- Expanded state: 4 training cards, hidden until toggled -->
-    <div id="aanbodGrid" class="hidden mt-12">
-      <button id="aanbodCollapse" class="mb-6 text-sm text-teal-700 hover:text-teal-600 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-700 rounded">
-        Toon minder
-      </button>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- All five trainings visible at once, no scroll or click needed -->
+    <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5" data-reveal>
 
-        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
-          <img src="assets/img/kennismaken-workshop.jpg" alt="Bos met veldbloemen, sfeerbeeld voor de kennismakingsworkshop" class="w-full aspect-[4/3] object-cover" loading="lazy" />
-          <div class="p-7 flex flex-col flex-1">
-            <img src="assets/img/icon-kennismaken.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
-            <h3 class="mt-4 font-display text-xl font-medium text-black">Workshop kennismaken met mindfulness</h3>
-            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Een losse bijeenkomst waarin je ervaart wat aandachttraining doet en of het bij je past.</p>
-            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
-              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
+      <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col hover:outline hover:outline-1 hover:outline-teal-700 hover:outline-offset-0">
+        <img src="assets/img/kennismaken-workshop.jpg" alt="Bos met veldbloemen, sfeerbeeld voor de kennismakingsworkshop" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+        <div class="p-6 flex flex-col flex-1">
+          <img src="assets/img/icon-kennismaken.svg" alt="" class="w-10 h-10" loading="lazy" width="40" height="40" />
+          <h3 class="mt-3 font-display text-lg font-medium text-black">Workshop kennismaken met mindfulness</h3>
+          <p class="mt-2 text-ink-600 text-sm leading-relaxed">Een losse bijeenkomst waarin je ervaart wat aandachttraining doet en of het bij je past.</p>
+          <a href="aanbod-kennismaking.html" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+            Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
-
-        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
-          <img src="assets/img/training-groep.webp" alt="Bloemen in de praktijkruimte, sfeerbeeld voor de groepstraining" class="w-full aspect-[4/3] object-cover" loading="lazy" />
-          <div class="p-7 flex flex-col flex-1">
-            <img src="assets/img/icon-groep.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
-            <h3 class="mt-4 font-display text-xl font-medium text-black">Training Mindfulness Groep</h3>
-            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Acht weken samen leren vertragen, in een kleine groep met persoonlijke aandacht.</p>
-            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
-              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
-          <img src="assets/img/training-individueel.webp" alt="Rustige praktijkruimte, sfeerbeeld voor de individuele training" class="w-full aspect-[4/3] object-cover" loading="lazy" />
-          <div class="p-7 flex flex-col flex-1">
-            <img src="assets/img/icon-individueel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
-            <h3 class="mt-4 font-display text-xl font-medium text-black">Training Individueel</h3>
-            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Op je eigen tempo, één op één begeleid.</p>
-            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
-              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
-          <img src="assets/img/shinrin-yoku.webp" alt="Bamboebos van onderaf gezien, sfeerbeeld voor Shinrin-yoku" class="w-full aspect-[4/3] object-cover" loading="lazy" />
-          <div class="p-7 flex flex-col flex-1">
-            <img src="assets/img/icon-wandel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
-            <h3 class="mt-4 font-display text-xl font-medium text-black">Shinrin-yoku</h3>
-            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Bewust wandelen tussen de bomen: de Japanse kunst van bosbaden voor rust en herstel.</p>
-            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
-              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col">
-          <img src="assets/img/iopt-individueel.webp" alt="Rustige praktijkruimte, sfeerbeeld voor IoPT individueel" class="w-full aspect-[4/3] object-cover" loading="lazy" />
-          <div class="p-7 flex flex-col flex-1">
-            <img src="assets/img/icon-individueel.svg" alt="" class="w-11 h-11" loading="lazy" width="44" height="44" />
-            <h3 class="mt-4 font-display text-xl font-medium text-black">IoPT Individueel</h3>
-            <p class="mt-2 text-ink-600 text-sm leading-relaxed">Werken met je innerlijke deelpersoonlijkheden, één op één, voor diepere zelfkennis en heling.</p>
-            <a href="#" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
-              Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-
       </div>
+
+      <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col hover:outline hover:outline-1 hover:outline-teal-700 hover:outline-offset-0">
+        <img src="assets/img/training-groep.webp" alt="Bloemen in de praktijkruimte, sfeerbeeld voor de groepstraining" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+        <div class="p-6 flex flex-col flex-1">
+          <img src="assets/img/icon-groep.svg" alt="" class="w-10 h-10" loading="lazy" width="40" height="40" />
+          <h3 class="mt-3 font-display text-lg font-medium text-black">Training Mindfulness Groep</h3>
+          <p class="mt-2 text-ink-600 text-sm leading-relaxed">Acht weken samen leren vertragen, in een kleine groep met persoonlijke aandacht.</p>
+          <a href="aanbod-groep.html" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+            Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col hover:outline hover:outline-1 hover:outline-teal-700 hover:outline-offset-0">
+        <img src="assets/img/training-individueel.webp" alt="Rustige praktijkruimte, sfeerbeeld voor de individuele training" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+        <div class="p-6 flex flex-col flex-1">
+          <img src="assets/img/icon-individueel.svg" alt="" class="w-10 h-10" loading="lazy" width="40" height="40" />
+          <h3 class="mt-3 font-display text-lg font-medium text-black">Training Individueel</h3>
+          <p class="mt-2 text-ink-600 text-sm leading-relaxed">Op je eigen tempo, één op één begeleid.</p>
+          <a href="aanbod-individueel.html" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+            Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col hover:outline hover:outline-1 hover:outline-teal-700 hover:outline-offset-0">
+        <img src="assets/img/shinrin-yoku.webp" alt="Bamboebos van onderaf gezien, sfeerbeeld voor Shinrin-yoku" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+        <div class="p-6 flex flex-col flex-1">
+          <img src="assets/img/icon-wandel.svg" alt="" class="w-10 h-10" loading="lazy" width="40" height="40" />
+          <h3 class="mt-3 font-display text-lg font-medium text-black">Shinrin-yoku</h3>
+          <p class="mt-2 text-ink-600 text-sm leading-relaxed">Bewust wandelen tussen de bomen: de Japanse kunst van bosbaden voor rust en herstel.</p>
+          <a href="aanbod-shinrin-yoku.html" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+            Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="aanbod-card bento-card rounded-3xl bg-white border border-black/10 card-shadow overflow-hidden flex flex-col hover:outline hover:outline-1 hover:outline-teal-700 hover:outline-offset-0">
+        <img src="assets/img/iopt-individueel.webp" alt="Rustige praktijkruimte, sfeerbeeld voor IoPT individueel" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+        <div class="p-6 flex flex-col flex-1">
+          <img src="assets/img/icon-individueel.svg" alt="" class="w-10 h-10" loading="lazy" width="40" height="40" />
+          <h3 class="mt-3 font-display text-lg font-medium text-black">IoPT Individueel</h3>
+          <p class="mt-2 text-ink-600 text-sm leading-relaxed">Werken met je innerlijke deelpersoonlijkheden, één op één, voor diepere zelfkennis en heling.</p>
+          <a href="aanbod-iopt-individueel.html" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:gap-2.5 transition-all">
+            Meer info <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -519,7 +472,7 @@
         vaak te weinig tijd voor.
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-6">
-        <a href="https://mindfulbijelise.nl/elise/" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 rounded-full px-6 py-3 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+        <a href="elise.html" class="btn-primary inline-flex items-center gap-2 rounded-full px-6 py-3 font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
           Meer over Elise
         </a>
       </div>
@@ -628,11 +581,11 @@
     <div>
       <h4 class="text-black font-medium mb-3 text-sm tracking-wide">Aanbod</h4>
       <ul class="space-y-2 text-sm">
-        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-kennismaking/" target="_blank" rel="noopener">Workshop kennismaken met mindfulness</a></li>
-        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/training-mindfulness-groep/" target="_blank" rel="noopener">Training mindfulness groep</a></li>
-        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/training-mindfulness-individueel/" target="_blank" rel="noopener">Training individueel</a></li>
-        <li><a class="hover:text-teal-700 transition-colors" href="https://mindfulbijelise.nl/aanbod/mindful-wandel/" target="_blank" rel="noopener">Shinrin-yoku</a></li>
-        <li><a class="hover:text-teal-700 transition-colors" href="#aanbod">IoPT individueel</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-kennismaking.html">Workshop kennismaken met mindfulness</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-groep.html">Training mindfulness groep</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-individueel.html">Training individueel</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-shinrin-yoku.html">Shinrin-yoku</a></li>
+        <li><a class="hover:text-teal-700 transition-colors" href="aanbod-iopt-individueel.html">IoPT individueel</a></li>
       </ul>
     </div>
     <div>
@@ -662,6 +615,12 @@
 </footer>
 
 <script>
+  // Header: transparent at top, white bar slides down on scroll
+  const siteHeader = document.querySelector('header');
+  function updateHeaderScroll() { siteHeader.classList.toggle('is-scrolled', window.scrollY > 40); }
+  updateHeaderScroll();
+  window.addEventListener('scroll', updateHeaderScroll, { passive: true });
+
   // Mobile menu
   const menuBtn = document.getElementById('menuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -747,59 +706,6 @@
     }, { threshold: 0.6 });
     sweepObserver.observe(sweepEl);
   }
-
-  // Aanbod: single tile expands into the 4 training cards on click
-  const aanbodToggle = document.getElementById('aanbodToggle');
-  const aanbodGrid = document.getElementById('aanbodGrid');
-  const aanbodCollapse = document.getElementById('aanbodCollapse');
-  const aanbodChevron = document.getElementById('aanbodChevron');
-
-  function openAanbod() {
-    aanbodToggle.setAttribute('aria-expanded', 'true');
-    if (reduceMotion || typeof anime === 'undefined') {
-      aanbodToggle.classList.add('hidden');
-      aanbodGrid.classList.remove('hidden');
-      return;
-    }
-    anime({
-      targets: aanbodToggle,
-      opacity: [1, 0],
-      scale: [1, 0.98],
-      duration: 250,
-      easing: 'easeInSine',
-      complete: () => {
-        aanbodToggle.classList.add('hidden');
-        aanbodGrid.classList.remove('hidden');
-        anime({
-          targets: aanbodGrid.querySelectorAll('.aanbod-card'),
-          opacity: [0, 1],
-          translateY: [24, 0],
-          delay: anime.stagger(90),
-          duration: 550,
-          easing: 'easeOutCubic',
-        });
-      }
-    });
-  }
-
-  function closeAanbod() {
-    aanbodToggle.setAttribute('aria-expanded', 'false');
-    aanbodGrid.classList.add('hidden');
-    aanbodToggle.classList.remove('hidden');
-    if (!reduceMotion && typeof anime !== 'undefined') {
-      anime({ targets: aanbodToggle, opacity: [0, 1], translateY: [10, 0], duration: 400, easing: 'easeOutCubic' });
-    }
-    aanbodToggle.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
-  }
-
-  aanbodToggle.setAttribute('aria-expanded', 'false');
-  aanbodToggle.addEventListener('click', openAanbod);
-  aanbodCollapse.addEventListener('click', closeAanbod);
-
-  // Young tree grows into the full tree in sync with the trainings opening/closing
-  const treeStage = document.getElementById('treeStage');
-  aanbodToggle.addEventListener('click', () => treeStage.classList.add('is-grown'));
-  aanbodCollapse.addEventListener('click', () => treeStage.classList.remove('is-grown'));
 
   // Magnifying lens over the practice-room photo (kennismaking card)
   const lensWrap = document.getElementById('lensWrap');
